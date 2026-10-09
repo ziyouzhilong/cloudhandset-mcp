@@ -8,7 +8,7 @@ This package contains a local plugin marketplace, the CloudHandset plugin, its M
 
 ## Install the plugin
 
-**Required model for phone operation:** Select **GPT-6.1 Sol** in your agent before asking it to operate the phone. This requirement applies to phone operation, not plugin installation.
+**Required model for phone operation:** Select **GPT-6.1 Sol or a more capable model** in your agent before asking it to operate the phone. This requirement applies to phone operation, not plugin installation.
 
 In a Codex conversation in **Work mode**, upload the plugin ZIP and ask Codex to install it for you. Complete your own CloudHandset login in the separate verification window when prompted.
 

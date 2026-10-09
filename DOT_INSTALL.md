@@ -6,7 +6,7 @@ This is a setup kit, not a one-click public marketplace installation. Your ChatG
 
 ## Get help from Codex
 
-**Required model for phone operation:** Select **GPT-6.1 Sol** in your agent before asking it to operate the phone. This requirement applies to phone operation, not plugin installation.
+**Required model for phone operation:** Select **GPT-6.1 Sol or a more capable model** in your agent before asking it to operate the phone. This requirement applies to phone operation, not plugin installation.
 
 Alternatively, upload the entire setup ZIP to a Codex conversation in **Work mode** and ask Codex to help you install it. You still need to complete your own account verification; the full setup ZIP is a chat attachment for setup assistance, not the archive to import through ChatGPT Plugins.
 

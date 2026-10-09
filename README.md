@@ -6,7 +6,7 @@ Connect your own Codex or OpenAI Dot to the physical Android phones covered by y
 
 [CloudHandset website](https://www.cloudhandset.com) · [Codex installation](CODEX_INSTALL.md) · [Dot installation](DOT_INSTALL.md) · [Releases](https://github.com/ziyouzhilong/cloudhandset-mcp/releases) · [Changelog](CHANGELOG.md) · [Support](SUPPORT.md)
 
-**Required model for phone operation:** Select **GPT-6.1 Sol** in your agent before asking it to operate the phone. This requirement applies to phone operation, not plugin installation.
+**Required model for phone operation:** Select **GPT-6.1 Sol or a more capable model** in your agent before asking it to operate the phone. This requirement applies to phone operation, not plugin installation.
 
 ## Download
 
