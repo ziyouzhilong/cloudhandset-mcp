@@ -2,11 +2,11 @@
 
 **Give your AI agent a real Android phone.**
 
-Connect your own Codex or OpenAI Dot to the physical Android phones covered by your CloudHandset leases. Your agent can inspect the screen, perform the task you request, verify the visible result, and release control when finished.
+Connect your own Codex, OpenAI Dot, or Meta Muse to the physical Android phones covered by your CloudHandset leases. Your agent can inspect the screen, perform the task you request, verify the visible result, and release control when finished.
 
-[CloudHandset website](https://www.cloudhandset.com) · [Codex installation](CODEX_INSTALL.md) · [Dot installation](DOT_INSTALL.md) · [Releases](https://github.com/ziyouzhilong/cloudhandset-mcp/releases) · [Changelog](CHANGELOG.md) · [Support](SUPPORT.md)
+[CloudHandset website](https://www.cloudhandset.com) · [Codex installation](CODEX_INSTALL.md) · [Dot installation](DOT_INSTALL.md) · [Muse setup](muse/README.md) · [Releases](https://github.com/ziyouzhilong/cloudhandset-mcp/releases) · [Changelog](CHANGELOG.md) · [Support](SUPPORT.md)
 
-**Required model for phone operation:** Select **GPT-6.1 Sol or a more capable model** in your agent before asking it to operate the phone. This requirement applies to phone operation, not plugin installation.
+**Required model for Codex and Dot phone operation:** Select **GPT-6.1 Sol or a more capable model** before asking Codex or Dot to operate the phone. This requirement applies to phone operation, not plugin installation. Muse uses its host-provided model; this kit does not select or replace that model.
 
 ## Download
 
@@ -14,8 +14,9 @@ Connect your own Codex or OpenAI Dot to the physical Android phones covered by y
 | --- | --- | --- |
 | Codex | [CloudHandset for Codex 0.1.2](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.09/cloudhandset-codex-plugin-0.1.2.zip) | [Installation guide](CODEX_INSTALL.md) |
 | OpenAI Dot | [CloudHandset for Dot 0.2.1](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.09/cloudhandset-dot-setup-0.2.1.zip) | [Installation guide](DOT_INSTALL.md) · [First screen check](DOT_SETUP.md) |
+| Meta Muse | [CloudHandset for Muse 0.1.0](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/muse-0.1.0/cloudhandset-muse-setup-0.1.0.zip) | [Setup guide](muse/README.md) · Single-account screen check passed |
 
-Download the ZIP for your client. Upload it to a Codex conversation in Work mode for setup assistance, or extract it and follow the manual guide. Use [SHA256SUMS](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.09/SHA256SUMS) to verify the original downloads. GitHub's automatically generated **Source code** archives contain the project documentation; choose the named plugin ZIP for installation.
+Download the ZIP for your client. For Codex and Dot, upload it to a Codex conversation in Work mode for setup assistance, or extract it and follow the manual guide. For Muse, follow its dedicated setup guide. Verify the original downloads with the [Codex/Dot checksums](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.09/SHA256SUMS) or [Muse checksums](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/muse-0.1.0/SHA256SUMS). GitHub's automatically generated **Source code** archives contain repository files; choose the named setup ZIP for your client.
 
 These public packages contain no login credentials or pre-bound customer connection. Every customer signs in with their own CloudHandset account. The Dot ZIP is a setup kit: create your account connection, bind its technical ID, and generate the smaller archive to upload to ChatGPT Plugins.
 
@@ -23,7 +24,7 @@ These public packages contain no login credentials or pre-bound customer connect
 
 ```mermaid
 flowchart LR
-    A[Your Codex or Dot] --> B[CloudHandset account verification]
+    A[Your Codex, Dot, or Muse] --> B[CloudHandset account verification]
     B --> C[Phone covered by your active lease]
     C --> D[Observe and act through MCP]
     D --> E[Verify the screen and release control]
@@ -48,6 +49,7 @@ Phone control follows the task you give the agent and the approvals required by 
 - A supported client that can use MCP tools and inspect the images returned by them.
 - **Codex:** a version with plugin support. Package installation was checked with Codex CLI `0.162.0-alpha.2`; the guide also includes a manual MCP connection route.
 - **Dot:** an account with **Create custom MCP server** and **Upload plugin archive**, plus Python 3.9 or later to bind and package your copy. On Windows, use `py -3` in place of `python3`.
+- **Muse:** access to Custom Connectors and Muse's execution environment with its official credential helper. A real connection and screen check passed in one Muse account on 2026-10-10.
 
 Nothing from these packages needs to be installed on the Android phone. The connection becomes useful after you complete your own account verification and first screen check.
 
@@ -104,6 +106,12 @@ The installed plugin should show **one connected CloudHandset app** and **one an
 
 Start with the [Dot screen-check prompt](DOT_SETUP.md). The [complete Dot installation guide](DOT_INSTALL.md) also explains the optional local Codex route, which requires an online computer connected to Dot.
 
+## Set up Meta Muse
+
+CloudHandset for **Meta Muse 0.1.0** is a separate setup kit with a Python adapter for Muse's Custom Connector credential flow. **A single-account connection and screen check passed on 2026-10-10:** OAuth, the official connector scaffold, discovery of all 12 MCP tools, listing the authorized phone, exclusive control acquisition, an actual screenshot read by the model, and confirmed closed/drained release. This check did not test taps, text input, or app workflows. The package is distributed separately under the `muse-0.1.0` release tag.
+
+Follow the [Muse setup guide](muse/README.md) and its [setup prompts](muse/SETUP.md). This targets Muse's personal agent, not Muse Code. The archive contains setup instructions and a credential-free adapter; it is not a native plugin import or a Meta Connector directory listing. Each customer authenticates their own CloudHandset account, selects an eligible leased Android phone, and completes the first screen check. Publishing the archive does not imply Meta review or approval.
+
 ## How account access works
 
 The MCP endpoint is `https://device.cloudhandset.com/mcp`. Your client opens an independent English verification window for your CloudHandset login. Enter your credentials there, not in an agent conversation. If multiple phones are eligible, select the phone you want to use.
@@ -116,7 +124,7 @@ Each phone has one active controller. When a person takes control back through C
 
 ### Is this a public plugin marketplace listing?
 
-This repository provides downloadable installation packages. Codex uses the included local plugin marketplace. Dot customers create their own MCP connection and upload their own bound skill archive. There is no one-click public marketplace installation in this release.
+This repository provides downloadable installation packages. Codex uses the included local plugin marketplace. Dot customers create their own MCP connection and upload their own bound skill archive. Muse uses a Custom Connector and execution adapter; it is not a Meta-approved directory listing. There is no one-click public marketplace installation in these releases.
 
 ### Does installing the package connect a phone automatically?
 
@@ -128,7 +136,7 @@ Existing and newly provisioned phones use the same client setup. A phone must fi
 
 ### Does my computer need to stay online?
 
-Codex needs its executing computer to remain available. Dot's direct cloud connection does not require your personal computer to stay online. The optional Dot-to-local-Codex route does. None of these packages installs an always-on task runner or guarantees indefinite or scheduled background execution.
+Codex needs its executing computer to remain available. Dot's direct cloud connection does not require your personal computer to stay online. The optional Dot-to-local-Codex route does. Muse's adapter runs in Muse's execution environment; availability and background behavior depend on that host. None of these packages installs an always-on task runner or guarantees indefinite or scheduled background execution.
 
 ### Why does Codex return to a localhost address after login?
 
@@ -152,9 +160,11 @@ Start with the installation guide for your client. For account, lease, connectio
 | --- | --- |
 | Codex setup ZIP | Local plugin marketplace, MCP configuration, phone-operation skill, and installation guide. |
 | Dot setup ZIP | Connection-binding script, unbound Dot skill, installation and first-use guides, and the optional Codex dependency. |
+| Muse setup ZIP | Custom Connector setup prompts, tool reference, and credential-free Python MCP adapter. |
 | [CODEX_INSTALL.md](CODEX_INSTALL.md) | Complete Codex setup and account-access guidance. |
 | [DOT_INSTALL.md](DOT_INSTALL.md) | Complete Dot OAuth, per-account binding, and archive-upload instructions. |
 | [DOT_SETUP.md](DOT_SETUP.md) | First-use prompts and control/recovery behavior. |
+| [muse/README.md](muse/README.md) | Muse compatibility, setup, and current validation status. |
 | [SHA256SUMS](SHA256SUMS) | Checksums for the downloadable packages. |
 
 This repository distributes client setup packages and documentation for the CloudHandset service.

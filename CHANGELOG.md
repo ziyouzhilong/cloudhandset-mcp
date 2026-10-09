@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-10 — CloudHandset for Meta Muse 0.1.0
+
+- Add a separate setup kit for Meta Muse's personal agent, using a Custom Connector and Python MCP adapter with Muse's credential helper.
+- Include setup prompts, the 12-tool reference, and rules for choosing a phone, inspecting images, resolving unknown operations, and confirming release.
+- Pass a real connection and screen check in one Muse account: OAuth, the official connector scaffold, discovery of all 12 MCP tools, listing the authorized phone, acquiring control, the model reading an actual screenshot, and closed/drained release. Taps, text input, and app workflows were not tested.
+- Keep the package free of customer credentials and account-bound configuration. This is not a native plugin import or a Meta-approved directory listing.
+- Keep the Codex 0.1.2 and Dot 0.2.1 downloads and checksums unchanged. Their GPT-6.1 Sol-or-more-capable requirement applies to Codex/Dot phone operation; Muse uses its host-provided model.
+
 ## 2026-10-09 — Public download packages
 
 ### CloudHandset for Codex 0.1.2
