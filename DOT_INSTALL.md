@@ -6,9 +6,9 @@ This is a setup kit, not a one-click public marketplace installation. Your ChatG
 
 ## Get help from Codex
 
-**Tested model:** In our current testing, **GPT-6.1 Sol** performs well when operating a real phone through CloudHandset MCP.
+**Required model for phone operation:** Select **GPT-6.1 Sol** in your agent before asking it to operate the phone. This requirement applies to phone operation, not plugin installation.
 
-Alternatively, upload the entire setup ZIP to a Codex conversation in **Work mode** and ask Codex to help you install it. **GPT-6.1 Sol** can help you complete the setup. You still need to complete your own account verification; the full setup ZIP is a chat attachment for setup assistance, not the archive to import through ChatGPT Plugins.
+Alternatively, upload the entire setup ZIP to a Codex conversation in **Work mode** and ask Codex to help you install it. You still need to complete your own account verification; the full setup ZIP is a chat attachment for setup assistance, not the archive to import through ChatGPT Plugins.
 
 ## 1. Create your CloudHandset connection
 

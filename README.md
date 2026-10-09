@@ -6,7 +6,7 @@ Connect your own Codex or OpenAI Dot to the physical Android phones covered by y
 
 [CloudHandset website](https://www.cloudhandset.com) · [Codex installation](CODEX_INSTALL.md) · [Dot installation](DOT_INSTALL.md) · [Releases](https://github.com/ziyouzhilong/cloudhandset-mcp/releases) · [Changelog](CHANGELOG.md) · [Support](SUPPORT.md)
 
-**Tested model:** In our current testing, **GPT-6.1 Sol** performs well when operating a real phone through CloudHandset MCP.
+**Required model for phone operation:** Select **GPT-6.1 Sol** in your agent before asking it to operate the phone. This requirement applies to phone operation, not plugin installation.
 
 ## Download
 
@@ -77,7 +77,7 @@ See the [Codex installation guide](CODEX_INSTALL.md) for the manual alternative,
 
 ## Install for Dot
 
-Alternatively, upload the entire setup ZIP to a Codex conversation in **Work mode** and ask Codex to help you install it. **GPT-6.1 Sol** can help you complete the setup. You still need to complete your own account verification; the full setup ZIP is a chat attachment for setup assistance, not the archive to import through ChatGPT Plugins.
+Alternatively, upload the entire setup ZIP to a Codex conversation in **Work mode** and ask Codex to help you install it. You still need to complete your own account verification; the full setup ZIP is a chat attachment for setup assistance, not the archive to import through ChatGPT Plugins.
 
 ### Manual installation
 
