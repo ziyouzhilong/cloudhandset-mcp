@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-10-10 — Muse installation guide
+
+- Add a five-step English chat-based installation guide with copyable prompts, connection form values, and the first screen check.
+- Link the guide from the repository and Muse overview. Published 0.1.0 ZIP files and checksums are unchanged.
+
 ## 2026-10-10 — CloudHandset for Meta Muse 0.1.0
 
 - Add a separate setup kit for Meta Muse's personal agent, using a Custom Connector and Python MCP adapter with Muse's credential helper.

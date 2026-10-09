@@ -8,7 +8,11 @@ Use this kit to prepare a Custom Connector for **Meta Muse, the personal agent**
 
 CloudHandset MCP is available to active customers for their own valid Android phone leases. Each authorization is bound to the phone selected during login. There is no fixed test account or required test phone. Other clients' successful connections do not establish Muse compatibility.
 
-## Start here
+## Install through Muse chat
+
+Follow the [five-step installation guide](https://github.com/ziyouzhilong/cloudhandset-mcp/blob/main/MUSE_INSTALL.md): extract the ZIP, attach its four files to Muse, request installation, complete the official connection form with client ID `cloudhandset-muse` and an empty client secret, then let Muse finish the skill and list your phone. The guide includes copyable prompts and a screen-only check. Reuse an existing ready connection.
+
+## Detailed setup
 
 1. Paste **Stage 1** from [SETUP.md](SETUP.md) into Muse. It asks Muse to establish its actual connection capabilities before attempting login.
 2. Give CloudHandset the non-secret client ID, exact registered callback URI, authentication method, and any connector requirements that Muse can verify. Do not send a complete authorization or callback URL containing `code`, `state`, or other session values.

@@ -19,3 +19,5 @@ Public issues are visible to everyone. Do not include passwords, verification co
 Ask the agent to release control and confirm that the session is closed and drained before disconnecting or removing a plugin. If release cannot be confirmed, report the unresolved session through support.
 
 Removing a plugin or signing out locally does not necessarily revoke a server-side authorization. For immediate revocation, ask support to confirm that authorization has been revoked and control has drained.
+
+For Muse installation, follow the [five-step guide](MUSE_INSTALL.md). Attach the four extracted files to Muse chat, complete its official connection form, then let Muse install the dedicated skill.

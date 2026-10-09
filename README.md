@@ -4,7 +4,7 @@
 
 Connect your own Codex, OpenAI Dot, or Meta Muse to the physical Android phones covered by your CloudHandset leases. Your agent can inspect the screen, perform the task you request, verify the visible result, and release control when finished.
 
-[CloudHandset website](https://www.cloudhandset.com) · [Codex installation](CODEX_INSTALL.md) · [Dot installation](DOT_INSTALL.md) · [Muse setup](muse/README.md) · [Releases](https://github.com/ziyouzhilong/cloudhandset-mcp/releases) · [Changelog](CHANGELOG.md) · [Support](SUPPORT.md)
+[CloudHandset website](https://www.cloudhandset.com) · [Codex installation](CODEX_INSTALL.md) · [Dot installation](DOT_INSTALL.md) · [Muse installation](MUSE_INSTALL.md) · [Releases](https://github.com/ziyouzhilong/cloudhandset-mcp/releases) · [Changelog](CHANGELOG.md) · [Support](SUPPORT.md)
 
 **Required model for Codex and Dot phone operation:** Select **GPT-6.1 Sol or a more capable model** before asking Codex or Dot to operate the phone. This requirement applies to phone operation, not plugin installation. Muse uses its host-provided model; this kit does not select or replace that model.
 
@@ -14,7 +14,7 @@ Connect your own Codex, OpenAI Dot, or Meta Muse to the physical Android phones 
 | --- | --- | --- |
 | Codex | [CloudHandset for Codex 0.1.2](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.09/cloudhandset-codex-plugin-0.1.2.zip) | [Installation guide](CODEX_INSTALL.md) |
 | OpenAI Dot | [CloudHandset for Dot 0.2.1](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.09/cloudhandset-dot-setup-0.2.1.zip) | [Installation guide](DOT_INSTALL.md) · [First screen check](DOT_SETUP.md) |
-| Meta Muse | [CloudHandset for Muse 0.1.0](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/muse-0.1.0/cloudhandset-muse-setup-0.1.0.zip) | [Setup guide](muse/README.md) · Single-account screen check passed |
+| Meta Muse | [CloudHandset for Muse 0.1.0](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/muse-0.1.0/cloudhandset-muse-setup-0.1.0.zip) | [Installation guide](MUSE_INSTALL.md) · Single-account screen check passed |
 
 Download the ZIP for your client. For Codex and Dot, upload it to a Codex conversation in Work mode for setup assistance, or extract it and follow the manual guide. For Muse, follow its dedicated setup guide. Verify the original downloads with the [Codex/Dot checksums](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.09/SHA256SUMS) or [Muse checksums](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/muse-0.1.0/SHA256SUMS). GitHub's automatically generated **Source code** archives contain repository files; choose the named setup ZIP for your client.
 
@@ -110,7 +110,7 @@ Start with the [Dot screen-check prompt](DOT_SETUP.md). The [complete Dot instal
 
 CloudHandset for **Meta Muse 0.1.0** is a separate setup kit with a Python adapter for Muse's Custom Connector credential flow. **A single-account connection and screen check passed on 2026-10-10:** OAuth, the official connector scaffold, discovery of all 12 MCP tools, listing the authorized phone, exclusive control acquisition, an actual screenshot read by the model, and confirmed closed/drained release. This check did not test taps, text input, or app workflows. The package is distributed separately under the `muse-0.1.0` release tag.
 
-Follow the [Muse setup guide](muse/README.md) and its [setup prompts](muse/SETUP.md). This targets Muse's personal agent, not Muse Code. The archive contains setup instructions and a credential-free adapter; it is not a native plugin import or a Meta Connector directory listing. Each customer authenticates their own CloudHandset account, selects an eligible leased Android phone, and completes the first screen check. Publishing the archive does not imply Meta review or approval.
+Download and extract the ZIP, attach its four files to a Muse conversation, and follow the [five-step Muse installation guide](MUSE_INSTALL.md). Muse creates the connection form and installs the skill; you complete your own CloudHandset login. For technical details, see the [setup prompts](muse/SETUP.md). This targets Muse's personal agent, not Muse Code. The archive contains setup instructions and a credential-free adapter; it is not a native plugin import or a Meta Connector directory listing. Each customer authenticates their own CloudHandset account, selects an eligible leased Android phone, and completes the first screen check. Publishing the archive does not imply Meta review or approval.
 
 ## How account access works
 
