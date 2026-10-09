@@ -4,6 +4,12 @@ Version 0.2.1. Connect Dot to the Android phones covered by your CloudHandset le
 
 This is a setup kit, not a one-click public marketplace installation. Your ChatGPT account must support **Create custom MCP server** and **Upload plugin archive**. You also need a CloudHandset account with an active phone lease and Python 3.9 or later. On Windows, replace `python3` in the commands below with `py -3`.
 
+## Get help from Codex
+
+**Tested model:** In our current testing, **GPT-6.1 Sol** performs well when operating a real phone through CloudHandset MCP.
+
+Alternatively, upload the entire setup ZIP to a Codex conversation in **Work mode** and ask Codex to help you install it. **GPT-6.1 Sol** can help you complete the setup. You still need to complete your own account verification; the full setup ZIP is a chat attachment for setup assistance, not the archive to import through ChatGPT Plugins.
+
 ## 1. Create your CloudHandset connection
 
 Open [ChatGPT Plugins](https://chatgpt.com/plugins), choose **Add → Create custom MCP server**, and enter:

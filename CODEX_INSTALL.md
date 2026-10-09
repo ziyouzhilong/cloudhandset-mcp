@@ -8,6 +8,12 @@ This package contains a local plugin marketplace, the CloudHandset plugin, its M
 
 ## Install the plugin
 
+**Tested model:** In our current testing, **GPT-6.1 Sol** performs well when operating a real phone through CloudHandset MCP.
+
+In a Codex conversation in **Work mode**, upload the plugin ZIP and ask Codex to install it for you. Complete your own CloudHandset login in the separate verification window when prompted.
+
+### Manual installation
+
 Unzip `cloudhandset-codex-plugin-0.1.2.zip` into a location you will keep. In your interactive terminal, change to its `cloudhandset-codex` folder, then run:
 
 ```sh

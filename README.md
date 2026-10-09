@@ -6,6 +6,8 @@ Connect your own Codex or OpenAI Dot to the physical Android phones covered by y
 
 [CloudHandset website](https://www.cloudhandset.com) · [Codex installation](CODEX_INSTALL.md) · [Dot installation](DOT_INSTALL.md) · [Releases](https://github.com/ziyouzhilong/cloudhandset-mcp/releases) · [Changelog](CHANGELOG.md) · [Support](SUPPORT.md)
 
+**Tested model:** In our current testing, **GPT-6.1 Sol** performs well when operating a real phone through CloudHandset MCP.
+
 ## Download
 
 | Client | Current package | Get started |
@@ -13,7 +15,7 @@ Connect your own Codex or OpenAI Dot to the physical Android phones covered by y
 | Codex | [CloudHandset for Codex 0.1.2](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.09/cloudhandset-codex-plugin-0.1.2.zip) | [Installation guide](CODEX_INSTALL.md) |
 | OpenAI Dot | [CloudHandset for Dot 0.2.1](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.09/cloudhandset-dot-setup-0.2.1.zip) | [Installation guide](DOT_INSTALL.md) · [First screen check](DOT_SETUP.md) |
 
-Download the ZIP for your client and extract it before following its guide. Use [SHA256SUMS](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.09/SHA256SUMS) to verify the original downloads. GitHub's automatically generated **Source code** archives contain the project documentation; choose the named plugin ZIP for installation.
+Download the ZIP for your client. Upload it to a Codex conversation in Work mode for setup assistance, or extract it and follow the manual guide. Use [SHA256SUMS](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.09/SHA256SUMS) to verify the original downloads. GitHub's automatically generated **Source code** archives contain the project documentation; choose the named plugin ZIP for installation.
 
 These public packages contain no login credentials or pre-bound customer connection. Every customer signs in with their own CloudHandset account. The Dot ZIP is a setup kit: create your account connection, bind its technical ID, and generate the smaller archive to upload to ChatGPT Plugins.
 
@@ -51,6 +53,10 @@ Nothing from these packages needs to be installed on the Android phone. The conn
 
 ## Install for Codex
 
+In a Codex conversation in **Work mode**, upload the plugin ZIP and ask Codex to install it for you. Complete your own CloudHandset login in the separate verification window when prompted.
+
+### Manual installation
+
 Extract `cloudhandset-codex-plugin-0.1.2.zip`, open a terminal in the extracted `cloudhandset-codex/` folder, and run:
 
 ```sh
@@ -70,6 +76,10 @@ Start with:
 See the [Codex installation guide](CODEX_INSTALL.md) for the manual alternative, login expiry, troubleshooting, and removal.
 
 ## Install for Dot
+
+Alternatively, upload the entire setup ZIP to a Codex conversation in **Work mode** and ask Codex to help you install it. **GPT-6.1 Sol** can help you complete the setup. You still need to complete your own account verification; the full setup ZIP is a chat attachment for setup assistance, not the archive to import through ChatGPT Plugins.
+
+### Manual installation
 
 1. Open [ChatGPT Plugins](https://chatgpt.com/plugins) and choose **Add → Create custom MCP server**.
 2. Enter the settings below, then complete **Verify and connect** in the separate CloudHandset verification window.
