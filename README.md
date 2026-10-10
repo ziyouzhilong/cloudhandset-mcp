@@ -13,10 +13,10 @@ Connect your own Codex, OpenAI Dot, or Meta Muse to the physical Android phones 
 | Client | Current package | Get started |
 | --- | --- | --- |
 | Codex | [CloudHandset for Codex 0.1.2](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.09/cloudhandset-codex-plugin-0.1.2.zip) | [Installation guide](CODEX_INSTALL.md) |
-| OpenAI Dot | [CloudHandset for Dot 0.2.1](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.09/cloudhandset-dot-setup-0.2.1.zip) | [Installation guide](DOT_INSTALL.md) · [First screen check](DOT_SETUP.md) |
+| OpenAI Dot | [CloudHandset for Dot 0.2.2](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/dot-0.2.2/cloudhandset-dot-setup-0.2.2.zip) | [Installation and upgrade](DOT_INSTALL.md) · [File upload](DOT_UPLOAD.md) · [First screen check](DOT_SETUP.md) |
 | Meta Muse | [CloudHandset for Muse 0.1.0](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/muse-0.1.0/cloudhandset-muse-setup-0.1.0.zip) | [Installation guide](MUSE_INSTALL.md) · Single-account screen check passed |
 
-Download the ZIP for your client. For Codex and Dot, upload it to a Codex conversation in Work mode for setup assistance, or extract it and follow the manual guide. For Muse, follow its dedicated setup guide. Verify the original downloads with the [Codex/Dot checksums](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.09/SHA256SUMS) or [Muse checksums](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/muse-0.1.0/SHA256SUMS). GitHub's automatically generated **Source code** archives contain repository files; choose the named setup ZIP for your client.
+Download the ZIP for your client. For Codex and Dot, upload it to a Codex conversation in Work mode for setup assistance, or extract it and follow the manual guide. For Muse, follow its dedicated setup guide. Verify the original downloads with the [Codex checksums](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.09/SHA256SUMS), [Dot 0.2.2 checksums](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/dot-0.2.2/SHA256SUMS), or [Muse checksums](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/muse-0.1.0/SHA256SUMS). GitHub's automatically generated **Source code** archives contain repository files; choose the named setup ZIP for your client.
 
 These public packages contain no login credentials or pre-bound customer connection. Every customer signs in with their own CloudHandset account. The Dot ZIP is a setup kit: create your account connection, bind its technical ID, and generate the smaller archive to upload to ChatGPT Plugins.
 
@@ -78,6 +78,8 @@ Start with:
 See the [Codex installation guide](CODEX_INSTALL.md) for the manual alternative, login expiry, troubleshooting, and removal.
 
 ## Install for Dot
+
+**Already using 0.2.1?** Keep the working CloudHandset connection, refresh its MCP tools, and bind the extracted 0.2.2 kit to the same technical app ID. Generate the archive using steps 3–4 below, then choose **More → Upload new version** on your existing plugin. Verify version 0.2.2, one connected app, and one android-phone skill. See [upgrade instructions](DOT_INSTALL.md#upgrade-from-021) and the [file-upload reference](DOT_UPLOAD.md).
 
 Alternatively, upload the entire setup ZIP to a Codex conversation in **Work mode** and ask Codex to help you install it. You still need to complete your own account verification; the full setup ZIP is a chat attachment for setup assistance, not the archive to import through ChatGPT Plugins.
 

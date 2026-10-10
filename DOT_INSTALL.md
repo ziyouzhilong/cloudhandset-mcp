@@ -1,6 +1,14 @@
 # CloudHandset for OpenAI Dot
 
-Version 0.2.1. Connect Dot to the Android phones covered by your CloudHandset leases, then install the phone-operation skill. Each customer connects their own account. The public download contains no account connection or login credentials.
+Version 0.2.2. Connect Dot to the Android phones covered by your CloudHandset leases, then install the phone-operation skill. Each customer connects their own account. The public download contains no account connection or login credentials.
+
+This version adds [file-upload parameters and workflow](DOT_UPLOAD.md). Refresh stale tools after the server update. Uploaded files arrive in Android Files/Downloads under `Download/CloudHandset`.
+
+## Upgrade from 0.2.1
+
+Keep your existing working CloudHandset connection. On its management page, refresh its MCP tools so `device_tool` exposes the upload arguments. Download and extract the 0.2.2 setup kit, then follow steps 2 and 3 below using the **same connection's technical app ID**. On your existing CloudHandset plugin page, choose **More → Upload new version** and upload the newly generated `cloudhandset-dot-connected.zip`. Confirm version **0.2.2**, one connected CloudHandset app, and one android-phone skill. Reconnect only if your account authorization has expired; updating the skill does not require creating another connection.
+
+If Dot still reports missing upload parameters, refresh/rediscover that existing connection's tools and start a new task with the updated skill. See the file-upload reference for exact fields, chunk limits, completion checks, and media-picker troubleshooting.
 
 This is a setup kit, not a one-click public marketplace installation. Your ChatGPT account must support **Create custom MCP server** and **Upload plugin archive**. You also need a CloudHandset account with an active phone lease and Python 3.9 or later. On Windows, replace `python3` in the commands below with `py -3`.
 
@@ -32,7 +40,7 @@ Create the connection and complete **Verify and connect** in the independent Clo
 
 ## 2. Bind your copy of the skill
 
-Extract `cloudhandset-dot-setup-0.2.1.zip`. In the extracted `cloudhandset-dot/` folder, find `bind-connection.py` and `plugin/`.
+Extract `cloudhandset-dot-setup-0.2.2.zip`. In the extracted `cloudhandset-dot/` folder, find `bind-connection.py` and `plugin/`.
 
 Open the newly created CloudHandset connection's management page and copy its technical app ID. It must have the form `asdk_app_…` or `plugin_asdk_app_…`. Use the real ID from your connection, not the display name or a hosted plugin's `Plugin_…` ID.
 

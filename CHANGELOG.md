@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-10 — CloudHandset for OpenAI Dot 0.2.2
+
+- Add the exact authenticated `device_tool` file-upload fields, 30 MiB file limit, ordered 32 KiB chunks, rate pacing, and checks for asynchronous completion.
+- Document source-file reading, SHA-256 verification, recovery using the original operation ID, and confirmed control release.
+- Explain the `Download/CloudHandset` destination and how to check the intended Android media picker after a media-index request. A completed transfer does not establish publication.
+- Add upgrade instructions that reuse the customer's existing connection and replace the skill through **Upload new version**. Refresh stale MCP tool schemas before uploading.
+- Publish unbound setup and plugin archives with SHA256SUMS. Existing Codex, Dot 0.2.1, and Muse release assets remain available.
+
+
 ## 2026-10-10 — Muse installation guide
 
 - Add a five-step English chat-based installation guide with copyable prompts, connection form values, and the first screen check.
