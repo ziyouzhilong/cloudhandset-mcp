@@ -12,11 +12,11 @@ Connect your own Codex, OpenAI Dot, or Meta Muse to the physical Android phones 
 
 | Client | Current package | Get started |
 | --- | --- | --- |
-| Codex | [CloudHandset for Codex 0.1.2](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.09/cloudhandset-codex-plugin-0.1.2.zip) | [Installation guide](CODEX_INSTALL.md) |
-| OpenAI Dot | [CloudHandset for Dot 0.2.2](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/dot-0.2.2/cloudhandset-dot-setup-0.2.2.zip) | [Installation and upgrade](DOT_INSTALL.md) · [File upload](DOT_UPLOAD.md) · [First screen check](DOT_SETUP.md) |
-| Meta Muse | [CloudHandset for Muse 0.1.0](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/muse-0.1.0/cloudhandset-muse-setup-0.1.0.zip) | [Installation guide](MUSE_INSTALL.md) · Single-account screen check passed |
+| Codex | [CloudHandset for Codex 0.1.3](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.11/cloudhandset-codex-plugin-0.1.3.zip) | [Installation guide](CODEX_INSTALL.md) |
+| OpenAI Dot | [CloudHandset for Dot 0.2.3](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.11/cloudhandset-dot-setup-0.2.3.zip) | [Installation and upgrade](DOT_INSTALL.md) · [File upload](DOT_UPLOAD.md) · [First screen check](DOT_SETUP.md) |
+| Meta Muse | [CloudHandset for Muse 0.1.1](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.11/cloudhandset-muse-setup-0.1.1.zip) | [Installation guide](MUSE_INSTALL.md) · Single-account screen check passed |
 
-Download the ZIP for your client. For Codex and Dot, upload it to a Codex conversation in Work mode for setup assistance, or extract it and follow the manual guide. For Muse, follow its dedicated setup guide. Verify the original downloads with the [Codex checksums](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.09/SHA256SUMS), [Dot 0.2.2 checksums](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/dot-0.2.2/SHA256SUMS), or [Muse checksums](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/muse-0.1.0/SHA256SUMS). GitHub's automatically generated **Source code** archives contain repository files; choose the named setup ZIP for your client.
+Download the ZIP for your client. For Codex and Dot, upload it to a Codex conversation in Work mode for setup assistance, or extract it and follow the manual guide. For Muse, follow its dedicated setup guide. Verify the original downloads with [SHA256SUMS](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.11/SHA256SUMS). GitHub's automatically generated **Source code** archives contain repository files; choose the named setup ZIP for your client.
 
 These public packages contain no login credentials or pre-bound customer connection. Every customer signs in with their own CloudHandset account. The Dot ZIP is a setup kit: create your account connection, bind its technical ID, and generate the smaller archive to upload to ChatGPT Plugins.
 
@@ -59,7 +59,7 @@ In a Codex conversation in **Work mode**, upload the plugin ZIP and ask Codex to
 
 ### Manual installation
 
-Extract `cloudhandset-codex-plugin-0.1.2.zip`, open a terminal in the extracted `cloudhandset-codex/` folder, and run:
+Extract `cloudhandset-codex-plugin-0.1.3.zip`, open a terminal in the extracted `cloudhandset-codex/` folder, and run:
 
 ```sh
 codex plugin marketplace add .
@@ -77,9 +77,11 @@ Start with:
 
 See the [Codex installation guide](CODEX_INSTALL.md) for the manual alternative, login expiry, troubleshooting, and removal.
 
+Existing Codex users: follow [the upgrade steps](CODEX_INSTALL.md#upgrade-an-existing-installation) to replace the local marketplace source while retaining OAuth. Confirm version 0.1.3 and start a new conversation.
+
 ## Install for Dot
 
-**Already using 0.2.1?** Keep the working CloudHandset connection, refresh its MCP tools, and bind the extracted 0.2.2 kit to the same technical app ID. Generate the archive using steps 3–4 below, then choose **More → Upload new version** on your existing plugin. Verify version 0.2.2, one connected app, and one android-phone skill. See [upgrade instructions](DOT_INSTALL.md#upgrade-from-021) and the [file-upload reference](DOT_UPLOAD.md).
+**Upgrading an earlier Dot version?** Keep the working CloudHandset connection, refresh its MCP tools, and bind the extracted 0.2.3 kit to the same technical app ID. Generate the archive using steps 3–4 below, then choose **More → Upload new version** on your existing plugin. Verify version 0.2.3, one connected app, and one android-phone skill. See [upgrade instructions](DOT_INSTALL.md#upgrade-from-an-earlier-version) and the [file-upload reference](DOT_UPLOAD.md).
 
 Alternatively, upload the entire setup ZIP to a Codex conversation in **Work mode** and ask Codex to help you install it. You still need to complete your own account verification; the full setup ZIP is a chat attachment for setup assistance, not the archive to import through ChatGPT Plugins.
 
@@ -110,15 +112,19 @@ Start with the [Dot screen-check prompt](DOT_SETUP.md). The [complete Dot instal
 
 ## Set up Meta Muse
 
-CloudHandset for **Meta Muse 0.1.0** is a separate setup kit with a Python adapter for Muse's Custom Connector credential flow. **A single-account connection and screen check passed on 2026-10-10:** OAuth, the official connector scaffold, discovery of all 12 MCP tools, listing the authorized phone, exclusive control acquisition, an actual screenshot read by the model, and confirmed closed/drained release. This check did not test taps, text input, or app workflows. The package is distributed separately under the `muse-0.1.0` release tag.
+CloudHandset for **Meta Muse 0.1.1** uses Muse's Custom Connector and official credential helper. Download the ZIP, attach its five files (`README.md`, `SETUP.md`, `TOOLS.md`, `cloudhandset.py`, `upload_file.py`) to a Muse conversation, and follow the [installation and upgrade guide](MUSE_INSTALL.md). Muse installs both scripts side by side; you complete your own CloudHandset login if needed. An existing valid connector can be retained when upgrading.
 
-Download and extract the ZIP, attach its four files to a Muse conversation, and follow the [five-step Muse installation guide](MUSE_INSTALL.md). Muse creates the connection form and installs the skill; you complete your own CloudHandset login. For technical details, see the [setup prompts](muse/SETUP.md). This targets Muse's personal agent, not Muse Code. The archive contains setup instructions and a credential-free adapter; it is not a native plugin import or a Meta Connector directory listing. Each customer authenticates their own CloudHandset account, selects an eligible leased Android phone, and completes the first screen check. Publishing the archive does not imply Meta review or approval.
+## Fast file upload
+
+All three versions include the same uploader. The agent reads your attached/local file, requests a file-specific upload through its authenticated connection, and sends one binary transfer. CloudHandset uses its original upload writer to deliver the file to the Android phone. The limit is 30 MiB. The agent checks final completion and releases control; it checks the intended media picker when your task needs it. See [the upload guide](DOT_UPLOAD.md).
+
+A 4,694,656-byte Demo MP4 completed upload, checksum and media-index checks in the 2026-10-11 acceptance run: web 41.829 s, Codex 23.447 s, Dot connection exercised by Codex 24.128 s, and Muse's own host 25.567 s. This was one run on one Android phone, not a speed guarantee or a test of Dot autonomously publishing content.
 
 ## How account access works
 
-The MCP endpoint is `https://device.cloudhandset.com/mcp`. Your client opens an independent English verification window for your CloudHandset login. Enter your credentials there, not in an agent conversation. If multiple phones are eligible, select the phone you want to use.
+The MCP endpoint is `https://device.cloudhandset.com/mcp`. Your client opens an independent English verification window for your CloudHandset login. Enter your credentials there, not in an agent conversation. Choose **Current and future Android phone leases** to include eligible phones added during this fixed authorization, or **Only one selected Android phone** for access to one phone. Existing single-phone connections do not expand automatically: reconnect once to opt in, then refresh the tools and call `list_devices` again. Each phone still requires an effective lease; account scope does not resume a manually paused phone.
 
-Authorization lasts **up to 30 days** and ends earlier when the selected phone's effective lease expires. When it expires, complete a new verification flow before continuing. Reauthentication cannot extend a phone lease. There is no separate Agent/MCP authorization page in the CloudHandset website console.
+Authorization lasts **up to 30 days**. Each phone requires an effective lease; single-phone access ends no later than that lease. When it expires, complete a new verification flow before continuing. Reauthentication cannot extend a phone lease. There is no separate Agent/MCP authorization page in the CloudHandset website console.
 
 Each phone has one active controller. When a person takes control back through CloudHandset, the agent must stop. Resuming agent control requires an explicit request and fresh verification. At the end of a task, the agent should confirm that its control session is closed and drained.
 
@@ -134,7 +140,7 @@ You must authenticate your own CloudHandset account and have an eligible phone l
 
 ### Can new phones use the same setup?
 
-Existing and newly provisioned phones use the same client setup. A phone must finish provisioning and have an effective lease before it is eligible. Select and verify access to the phone you want the agent to use.
+Existing and newly provisioned phones use the same client setup. A phone must finish provisioning and have an effective lease before it is eligible. With account-scope authorization, call `list_devices` again to discover them. Existing single-phone connections require a one-time reconnect to opt in.
 
 ### Does my computer need to stay online?
 

@@ -1,8 +1,8 @@
 # CloudHandset for Codex
 
-Plugin package version: **0.1.2**. Requires a Codex version that supports plugins; installation was checked with Codex CLI **0.162.0-alpha.2**.
+Plugin package version: **0.1.3**. Requires a Codex version that supports plugins; installation was checked with Codex CLI **0.162.0-alpha.2**.
 
-Connect Codex to the Android phones covered by your active CloudHandset leases. Access is limited to your own account and the phone selected during verification. Existing and newly provisioned phones use the same connection setup; a phone must finish provisioning and have a valid lease before it is available to you. Nothing from this package needs to be installed on the phone.
+Connect Codex to the Android phones covered by your active CloudHandset leases. Access is limited to your own account and the scope you approve during verification. Existing and newly provisioned phones use the same connection setup; a phone must finish provisioning and have a valid lease before it is available to you. Nothing from this package needs to be installed on the phone.
 
 This package contains a local plugin marketplace, the CloudHandset plugin, its MCP connection, and the `cloudhandset-phone` skill with suggested prompts. It contains no credentials and does not grant access by itself.
 
@@ -14,7 +14,7 @@ In a Codex conversation in **Work mode**, upload the plugin ZIP and ask Codex to
 
 ### Manual installation
 
-Unzip `cloudhandset-codex-plugin-0.1.2.zip` into a location you will keep. In your interactive terminal, change to its `cloudhandset-codex` folder, then run:
+Unzip `cloudhandset-codex-plugin-0.1.3.zip` into a location you will keep. In your interactive terminal, change to its `cloudhandset-codex` folder, then run:
 
 ```sh
 codex plugin marketplace add .
@@ -29,6 +29,23 @@ If installation already completed verification, an additional login is unnecessa
 An existing manual `cloudhandset` connection with the same endpoint and OAuth client ID can be retained. Do not create duplicate server names, copy credentials, or remove a working login just to install the skill. Check any conflicting configuration before changing it.
 
 This is a local distributable plugin, not a listing in the public Codex plugin directory. It uses Codex's supported `.codex-plugin/plugin.json` compatibility format so the MCP connection can retain the registered OAuth client ID. Official reference: [Build plugins](https://developers.openai.com/plugins/build/plugins).
+
+## Upgrade an existing installation
+
+Keep your working CloudHandset OAuth connection. Extract the new 0.1.3 ZIP into a permanent folder. From its `cloudhandset-codex/` directory, replace the old local marketplace source and reinstall the plugin:
+
+```sh
+codex plugin marketplace remove cloudhandset
+codex plugin marketplace add .
+codex plugin add cloudhandset@cloudhandset
+codex plugin list
+```
+
+Confirm version **0.1.3**, refresh the connection's tools, and open a new conversation. These commands update the plugin source; do not log out or create another MCP connection. If a conflicting installation is reported, inspect it before changing unrelated configuration.
+
+## Fast file upload
+
+Version 0.1.3 adds a packaged Python uploader. Attach a file and ask Codex to upload it to your chosen Android phone using the fast upload workflow, verify completion and the returned path, then release control. The host sends one binary transfer; CloudHandset reuses its original upload writer. The limit is 30 MiB. See [file-upload.md](DOT_UPLOAD.md). A completed transfer does not publish the file in an app.
 
 ## Prompts and skill discovery
 
@@ -68,7 +85,7 @@ If the connection already exists, check its URL and client ID before changing it
 
 Do not add `oauth_resource` or `--oauth-resource`: Codex discovers the resource from the server metadata, and an additional value can create a duplicate parameter in the tested version.
 
-Enter your CloudHandset account email, password and, if enabled, two-step verification code only in the **English verification window opened by Codex**. The CloudHandset website console has no separate Agent/MCP authorization page. If you have multiple eligible phones, choose the phone you want Codex to use. No active lease means no phone access.
+Enter your CloudHandset account email, password and, if enabled, two-step verification code only in the **English verification window opened by Codex**. The CloudHandset website console has no separate Agent/MCP authorization page. Choose **Current and future Android phone leases** to include eligible phones added during this fixed authorization, or **Only one selected Android phone** for access to one phone. Existing single-phone connections do not expand automatically: reconnect once to opt in, then refresh the tools and call `list_devices` again. Each phone still requires an effective lease; account scope does not resume a manually paused phone. No active lease means no phone access.
 
 A successful login may return to a `127.0.0.1` callback handled by Codex on your computer; the MCP service remains at `https://device.cloudhandset.com/mcp`. Do not share passwords, codes, tokens, cookies or full callback URLs in chat or configuration files.
 
@@ -84,7 +101,7 @@ CloudHandset MCP does not provide audio.
 
 ## Expiry and taking control back
 
-Access lasts **up to 30 days**, ending earlier if the selected Android phone's lease expires. CloudHandset does not issue refresh tokens. If access expires, you receive a `grant_expired` or `401` response, or Codex asks you to authenticate, stop actions and run:
+Authorization lasts **up to 30 days**. Each Android phone is accessible only while its effective lease is valid; single-phone authorization ends no later than that lease. CloudHandset does not issue refresh tokens. If access expires, you receive a `grant_expired` or `401` response, or Codex asks you to authenticate, stop actions and run:
 
 ```sh
 codex mcp login cloudhandset

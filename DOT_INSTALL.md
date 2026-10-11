@@ -1,14 +1,14 @@
 # CloudHandset for OpenAI Dot
 
-Version 0.2.2. Connect Dot to the Android phones covered by your CloudHandset leases, then install the phone-operation skill. Each customer connects their own account. The public download contains no account connection or login credentials.
+Version 0.2.3. Connect Dot to the Android phones covered by your CloudHandset leases, then install the phone-operation skill. Each customer connects their own account. The public download contains no account connection or login credentials.
 
-This version adds [file-upload parameters and workflow](DOT_UPLOAD.md). Refresh stale tools after the server update. Uploaded files arrive in Android Files/Downloads under `Download/CloudHandset`.
+This version adds a packaged Python uploader and [fast file upload](DOT_UPLOAD.md): one binary transfer through the original CloudHandset upload writer, with a 30 MiB limit. Refresh stale tools after the server update. Uploaded files arrive in Android Files/Downloads under `Download/CloudHandset`.
 
-## Upgrade from 0.2.1
+## Upgrade from an earlier version
 
-Keep your existing working CloudHandset connection. On its management page, refresh its MCP tools so `device_tool` exposes the upload arguments. Download and extract the 0.2.2 setup kit, then follow steps 2 and 3 below using the **same connection's technical app ID**. On your existing CloudHandset plugin page, choose **More → Upload new version** and upload the newly generated `cloudhandset-dot-connected.zip`. Confirm version **0.2.2**, one connected CloudHandset app, and one android-phone skill. Reconnect only if your account authorization has expired; updating the skill does not require creating another connection.
+Keep your existing working CloudHandset connection. On its management page, refresh its MCP tools so `device_tool` exposes the upload arguments. Download and extract the 0.2.3 setup kit, then follow steps 2 and 3 below using the **same connection's technical app ID**. On your existing CloudHandset plugin page, choose **More → Upload new version** and upload the newly generated `cloudhandset-dot-connected.zip`. Confirm version **0.2.3**, one connected CloudHandset app, and one android-phone skill. Reconnect only if your account authorization has expired; updating the skill does not require creating another connection.
 
-If Dot still reports missing upload parameters, refresh/rediscover that existing connection's tools and start a new task with the updated skill. See the file-upload reference for exact fields, chunk limits, completion checks, and media-picker troubleshooting.
+If Dot still reports missing upload parameters, refresh/rediscover that existing connection's tools and start a new task with the updated skill. Use the fast-upload reference for the one-transfer workflow, completion checks, and media-picker verification. Do not silently fall back to hundreds of per-chunk tool calls.
 
 This is a setup kit, not a one-click public marketplace installation. Your ChatGPT account must support **Create custom MCP server** and **Upload plugin archive**. You also need a CloudHandset account with an active phone lease and Python 3.9 or later. On Windows, replace `python3` in the commands below with `py -3`.
 
@@ -36,11 +36,11 @@ Open [ChatGPT Plugins](https://chatgpt.com/plugins), choose **Add → Create cus
 
 The displayed callback must match this value exactly. If it differs or the required settings are unavailable, contact CloudHandset support; do not substitute a callback or invent a client secret. The client ID is a public application identifier, not a password.
 
-Create the connection and complete **Verify and connect** in the independent CloudHandset login window. Use your own account there; never paste passwords, verification codes, tokens, or complete OAuth callback URLs into a chat. Authorization lasts at most 30 days and cannot outlast the phone's effective lease. When it expires, reconnect through the login window.
+Create the connection and complete **Verify and connect** in the independent CloudHandset login window. Use your own account there; never paste passwords, verification codes, tokens, or complete OAuth callback URLs into a chat. Authorization lasts at most 30 days, and each phone requires a valid effective lease. Choose **Current and future Android phone leases** to include eligible phones added during this fixed authorization, or **Only one selected Android phone** for access to one phone. Existing single-phone connections do not expand automatically: reconnect once to opt in, then refresh the tools and call `list_devices` again. Each phone still requires an effective lease; account scope does not resume a manually paused phone. When it expires, reconnect through the login window.
 
 ## 2. Bind your copy of the skill
 
-Extract `cloudhandset-dot-setup-0.2.2.zip`. In the extracted `cloudhandset-dot/` folder, find `bind-connection.py` and `plugin/`.
+Extract `cloudhandset-dot-setup-0.2.3.zip`. In the extracted `cloudhandset-dot/` folder, find `bind-connection.py` and `plugin/`.
 
 Open the newly created CloudHandset connection's management page and copy its technical app ID. It must have the form `asdk_app_…` or `plugin_asdk_app_…`. Use the real ID from your connection, not the display name or a hosted plugin's `Plugin_…` ID.
 
@@ -75,7 +75,7 @@ If custom MCP creation or archive upload is unavailable for your account, this c
 
 ## Optional: local Codex fallback
 
-The setup kit includes CloudHandset for Codex 0.1.2 under `local-codex/`. Keep an existing working installation. Otherwise follow `local-codex/README.md` to install it and log in on your computer.
+The setup kit includes CloudHandset for Codex 0.1.3 under `local-codex/`. Keep an existing working installation. Otherwise follow `local-codex/README.md` to install it and log in on your computer.
 
 To use that route, allow your Dot access to the computer from its **Computers** settings, keep the computer online with the desktop app open, and explicitly ask Dot to create a local Codex task using the installed `cloudhandset:cloudhandset-phone` skill. Connecting the computer to Codex is separate from allowing Dot access. The local executor inspects phone images; Dot should report that distinction. This route uses the existing local connection and must not copy cloud credentials or add a duplicate MCP server.
 

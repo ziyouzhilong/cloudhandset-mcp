@@ -1,5 +1,11 @@
 # First phone check with Dot
 
+## Account connection and newly added phones
+
+When the CloudHandset verification page offers **Current and future Android phone leases**, choose it to authorize this connection for the account's eligible phones, including phones added during the fixed 30-day connection. Each phone remains limited by its effective lease. Existing single-phone connections do not expand automatically; reconnect once to opt in. **Only one selected Android phone** keeps the previous single-phone scope. Account access does not resume paused phones; after the user requests resumption, verify again using the single-phone option for that phone.
+
+Call `list_devices` again after adding a phone and at the start of each task. Select the returned `device_id`; never reuse a different phone's session. For `device_tool` actions named `share.*`, supply that `device_id` explicitly. A valid account connection can return an empty list when it has no eligible leases.
+
 Complete the connection and skill installation in [DOT_INSTALL.md](DOT_INSTALL.md) first. The installed plugin should show one connected CloudHandset app and one android-phone skill.
 
 Send this to Dot:

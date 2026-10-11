@@ -1,41 +1,21 @@
-# CloudHandset file upload
+# CloudHandset file upload — Codex, Dot and Muse
 
-Use the authenticated `device_tool`. Call `list_devices`, match the requested phone, and `acquire_control`; retain its `session_id`. Upload requires exclusive control but no `observation_id`.
+Included in Codex **0.1.3**, Dot **0.2.3**, and Muse **0.1.1**. Codex and Dot use `scripts/upload_file.py` in the installed skill. Muse uses its `cloudhandset.py upload` command; see the [Muse tool reference](muse/TOOLS.md#fast-upload-011).
 
-## Exact arguments
+Suggested request: “Upload my attached file to [PHONE NAME] using the packaged fast uploader. Verify completion and the returned Android path, check the intended media picker if needed, and release control. Do not publish anything.”
 
-All fields are top-level arguments, without an `input` or `parameters` wrapper. The tool name may have a connector prefix.
+Use this workflow for a user-requested file transfer. It reuses CloudHandset's existing upload, integrity check and Android phone writer. Maximum file size is 30 MiB. Obtain the selected phone's exclusive `session_id` first.
 
-| `action` | Required fields in addition to `action` |
-| --- | --- |
-| `file.upload_begin` | `session_id`, `operation_id`, `name`, `size`, `sha256` |
-| `file.upload_chunk` | `session_id`, `operation_id`, `upload_id`, `offset`, `data` |
-| `file.upload_complete` | `session_id`, `operation_id`, `upload_id` |
-| `file.upload_status` | `session_id`, `upload_id` |
-| `file.upload_cancel` | `session_id`, `operation_id`, `upload_id` |
+1. In the host execution environment, run `python3 scripts/upload_file.py inspect /absolute/path/to/file`. Use the actual attachment/local file. The result contains `name`, `size`, and `sha256`; no file bytes enter the model context.
+2. Through the existing authenticated MCP connection, call `device_tool` with `action: "file.upload_begin"`, that `session_id`, a fresh `operation_id`, and the three returned file fields. Save `result.upload_id` and the returned `upload` ticket (including `complete_operation_id`) in private process memory or a temporary file accessible only to the user. Never display or publish `upload_token`. It is a one-use capability for this exact file and control session, valid for at most ten minutes; it cannot list or operate phones. Do not extract OAuth credentials.
+3. Run `python3 scripts/upload_file.py send /absolute/path/to/file`, supplying only the returned `upload` ticket object as JSON on **stdin**, not command-line arguments. The helper sends one binary PUT to the fixed CloudHandset host. It checks file size/digest, blocks redirects, never retries, and never uses browser cookies or another client's credentials. Remove any private temporary ticket file afterward.
+4. A successful PUT means staging finished and final phone transfer was submitted. If `receipt.result.state` is `running`, call the authenticated `device_tool` with `action: "operation.status"`, `session_id`, and the returned **complete_operation_id** until a terminal state, using bounded polling. Success requires `result.state: "succeeded"` plus the expected `bytes` and returned `path`. Preserve both operation IDs on interruption. A lost PUT response is not permission to repeat PUT or prepare another upload: query the original completion operation; if absent, inspect `file.upload_status` for the same upload and report the unresolved transfer.
+5. Supported videos/images request Android media scanning where the device Bridge supports it. Verify visibility in the intended app if the task requires it. A successful transfer does not establish publication. Release control and confirm closed/drained after the task.
 
-- IDs: actual returned UUIDs for `session_id` and `upload_id`. Each intended mutation gets a new `operation_id` of 1–64 letters, digits, `_`, or `-`; preserve the original ID when resolving a lost response.
-- `name`: safe source basename, 1–160 characters, nonblank, no slash, backslash, or control characters.
-- `size`: exact integer byte size, 1–31457280 (30 MiB).
-- `sha256`: actual complete-file SHA-256, 64 lowercase hexadecimal characters.
-- `offset`: integer decoded-byte offset starting at 0, advanced only by confirmed received bytes.
-- `data`: standard base64 of at most 32768 source bytes, maximum 44000 encoded characters. Do not send a data URL or a filename in this field.
+To cancel, use authenticated `device_tool`, `action: "file.upload_cancel"`, the original `session_id`/`upload_id` and a new operation ID for the cancellation. Session release, lease expiry, revoked account access and manual pause stop the upload writer. Failed transfers are not automatically replayed.
 
-## Read and transfer the source file
+The transfer uses an independent 4 MiB/s byte budget and continuously sends the original 32 KiB chunks from the server. It does not consume one phone-action quota entry per chunk. Normal phone controls retain their existing limits. Each chunk rechecks account/lease/session access; Bridge permits are checked before every original chunk and final device write.
 
-Use the host's execution environment to read a real attached/local file. Python's `pathlib.Path(path).read_bytes()`, `hashlib.sha256(bytes).hexdigest()`, and `base64.b64encode(bytes[offset:offset + 32768]).decode('ascii')` produce the inputs. Python, requests, and curl do not automatically inherit MCP credentials. Send generated arguments through the authenticated discovered tool.
+If the current tools do not expose `file.upload_begin`, refresh the existing connection's tools and reload the updated skill. If the begin response does not include an `upload` ticket, the server or selected Android phone does not support this workflow. Report that specific gap. The older `file.upload_begin/chunk/complete` protocol remains compatible, but do not silently fall back to hundreds of slow tool calls.
 
-1. Begin with name, size, and digest. Read the returned `result` object and retain `result.upload_id`/`result.job_id`; `receiving` only means staging started.
-2. Send ordered chunks one at a time with distinct operation IDs. Confirm `bytes_received` (or `received`) before advancing. The final chunk may be smaller. A roughly 4.5 MiB video needs about 144 chunks.
-3. Device limits are 60 mutations/minute and 2/second per grant: pace at least 1.1 seconds between upload mutations by default, and honor any longer returned delay. Do not send chunks concurrently. Ordinary tool calls have a separate 180/minute allowance; release and operation-status reserve separate capacity.
-4. When confirmed received bytes equal size, call complete. Completion may return `running`/`bridge_task_accepted` before the phone finishes. Query `action: operation.status` with the **original complete operation ID** until its `result.state` is `succeeded` or a terminal failure. Retain `result.bytes` and `result.path`. Digest verification precedes transfer; phone file size is checked afterward. A transport response alone is insufficient.
-5. Files arrive under `/sdcard/Download/CloudHandset/` with an upload-ID prefix. Use the returned exact path/name. Supported videos and images request Android media indexing; `media_scan_requested` confirms the request, not that an app already refreshed. Reopen/refresh the intended picker and verify the file is visible. Use Files/Downloads only if that app actually offers it; some photo pickers do not. A scan error does not undo the verified transfer or justify re-uploading it. Transfer success does not establish publication.
-6. Release control on completion/interruption and confirm closed/drained.
-
-## Lost responses and cleanup
-
-For a timed-out begin/chunk/complete, query `device_tool` with `action: operation.status`, the session, and the **original** operation ID. Never generate a fresh ID to replay an uncertain mutation. During staging, `file.upload_status` reports progress and is exempt from the device-action quota. Completion removes temporary staging, so afterward use the original complete operation's result/status rather than treating upload-status as a permanent file listing.
-
-If the transfer cannot continue, cancel the known staged upload when permitted, then release. On lost control/authentication/lease, stop and report unresolved state. Do not install APKs, reboot, change accounts, or use a shell/URL fetch to bypass upload.
-
-If the host exposes a stale/untyped `device_tool`, refresh/rediscover the existing connection's tools. Report the precise missing field or file-reading capability; documented parameters cannot authorize calls that the host cannot express.
+The host must be able to read the selected file and run the packaged uploader. A local path is read by the host helper, never by the remote MCP server. If that execution/file capability is unavailable, report it; do not invent file bytes or substitute an arbitrary URL fetch.

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-11 — Codex 0.1.3, Dot 0.2.3 and Muse 0.1.1
+
+- Include the shared fast uploader: one binary transfer from the agent host, followed by the original CloudHandset upload writer and separate final completion checks. The 30 MiB limit is unchanged.
+- Keep existing OAuth connections and private bindings when upgrading. Document account-scope authorization for current and future eligible Android phone leases; existing single-phone grants require explicit opt-in.
+- Include both Python files in Muse's five-file kit and Codex 0.1.3 in Dot's optional local fallback.
+- Publish four unbound archives, English installation and upgrade steps, and unified SHA256SUMS. Earlier release assets remain available.
+- Validate the same 4,694,656-byte Demo MP4 through the web, Codex, the Dot connection exercised by Codex, and Muse's own host, including Android checksum/media-index checks and closed/drained release. Dot's autonomous model and app publication were not tested.
+
 ## 2026-10-10 — CloudHandset for OpenAI Dot 0.2.2
 
 - Add the exact authenticated `device_tool` file-upload fields, 30 MiB file limit, ordered 32 KiB chunks, rate pacing, and checks for asynchronous completion.
