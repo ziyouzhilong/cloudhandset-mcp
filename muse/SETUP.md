@@ -1,3 +1,7 @@
+## Upgrade to fast upload 0.1.1
+
+Keep the existing Custom Connector and its private skill binding. Install both `cloudhandset.py` and `upload_file.py` together in that skill's bin/scripts directory and update TOOLS.md. Use its Fast upload command; no new OAuth connection is needed for this update. This five-file kit includes both scripts; install them side by side for a new installation as well.
+
 # Set up CloudHandset in Meta Muse
 
 This is a two-stage compatibility and connection procedure for Meta Muse's personal agent. On 2026-10-10, one account completed the hosted adapter's no-touch connection check: authenticated tool discovery and phone listing, one acquisition, one JPEG observation inspected with `muse.read`, and confirmed release with `closed: true`, `state: closed`, and `bridge_execution_drained` evidence. No screen action was performed. Independent service records corroborated the selected phone, single observation, absence of screen-action operations, and closed/drained release. Paste Stage 1 first for a new installation; Stage 2 checks that installation's authentication, image visibility, and cleanup.
@@ -50,7 +54,7 @@ An unsupported or unknown requirement ends Stage 1. Publishing this setup kit or
 
 ## Stage 2 — authenticate, select the phone, and check the screen
 
-Use this prompt **only after CloudHandset confirms registration and the execution path is verified**. Choose the intended phone in the independent CloudHandset authorization window. The tool's device list is scoped to that authorization; it is not an inventory of every phone on the account.
+Use this prompt **only after CloudHandset confirms registration and the execution path is verified**. When the CloudHandset verification page offers **Current and future Android phone leases**, choose it to authorize this connection for the account's eligible phones, including phones added during the fixed 30-day connection. Each phone remains limited by its effective lease. Existing single-phone connections do not expand automatically; reconnect once to opt in. **Only one selected Android phone** keeps the previous single-phone scope. Account access does not resume paused phones; after the user requests resumption, verify again using the single-phone option for that phone. Select the intended phone from a fresh `list_devices` result after authorization.
 
 ### Complete the official connection form
 

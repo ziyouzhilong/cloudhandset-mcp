@@ -1,16 +1,20 @@
 # CloudHandset for Meta Muse
 
-Setup kit **0.1.0** · Updated **2026-10-10**
+Setup kit **0.1.1** · Updated **2026-10-11**
 
 Use this kit to prepare a Custom Connector for **Meta Muse, the personal agent**. It contains connection instructions, a Python MCP adapter, and a tool reference. It is not a Muse Code configuration, a native importable plugin, or a Meta-approved directory listing.
 
 **Current compatibility:** in a 2026-10-10 account check, Muse reported no native entry point for registering an arbitrary remote MCP server. Its Custom Connector uses PKCE `S256`, callback `https://agent.meta.ai/api/hatch/oauth/callback`, and public client ID `cloudhandset-muse`. CloudHandset registered that client on 2026-10-10 and supports its omitted `resource` parameter while keeping authorization bound to the fixed MCP endpoint. The supplied adapter uses Muse's official credential helper. A live account check completed OAuth, official skill scaffolding, discovery of all 12 tools, phone listing, acquisition, one JPEG observation opened with `muse.read`, and confirmed control release. No screen actions were performed. This is a single-account connection check, not a claim about every Muse version or business workflow.
 
-CloudHandset MCP is available to active customers for their own valid Android phone leases. Each authorization is bound to the phone selected during login. There is no fixed test account or required test phone. Other clients' successful connections do not establish Muse compatibility.
+CloudHandset MCP is available to active customers for their own valid Android phone leases. Authorization covers either the phone selected during login or the current and future Android phone leases explicitly approved by the user. There is no fixed test account or required test phone. Other clients' successful connections do not establish Muse compatibility.
 
 ## Install through Muse chat
 
-Follow the [five-step installation guide](https://github.com/ziyouzhilong/cloudhandset-mcp/blob/main/MUSE_INSTALL.md): extract the ZIP, attach its four files to Muse, request installation, complete the official connection form with client ID `cloudhandset-muse` and an empty client secret, then let Muse finish the skill and list your phone. The guide includes copyable prompts and a screen-only check. Reuse an existing ready connection.
+Follow the [five-step installation guide](https://github.com/ziyouzhilong/cloudhandset-mcp/blob/main/MUSE_INSTALL.md): extract the ZIP, attach its five files to Muse, request installation, complete the official connection form with client ID `cloudhandset-muse` and an empty client secret, then let Muse finish the skill and list your phone. The guide includes copyable prompts and a screen-only check. Reuse an existing ready connection.
+
+For an existing installation, replace `cloudhandset.py` and place the new `upload_file.py` beside it. Retain the existing official connector binding. Use `cloudhandset.py upload` as described in [TOOLS.md](TOOLS.md) for one binary transfer; the adapter checks completion separately.
+
+On 2026-10-11, the supplied 0.1.1 scripts completed a real 4,694,656-byte MP4 upload from Muse: one binary PUT, completion confirmed, the Android file checksum verified, and control released with `bridge_execution_drained`. The observed begin-to-completion time was 25.567 seconds in that single-account check; transfer speed depends on the host and network.
 
 ## Detailed setup
 
@@ -54,7 +58,7 @@ For support, provide the Muse version, timestamp and timezone, connection stage,
 
 ## Package contents
 
-`cloudhandset-muse-setup-0.1.0.zip` contains only `README.md`, `SETUP.md`, `TOOLS.md`, and `cloudhandset.py` under `cloudhandset-muse/`. It includes no credentials or guessed import manifest. The Python script runs inside Muse's execution environment with its official credential helper; see the installation steps in [SETUP.md](SETUP.md).
+`cloudhandset-muse-setup-0.1.1.zip` contains only `README.md`, `SETUP.md`, `TOOLS.md`, `cloudhandset.py`, and `upload_file.py` under `cloudhandset-muse/`. It includes no credentials or guessed import manifest. The Python script runs inside Muse's execution environment with its official credential helper; see the installation steps in [SETUP.md](SETUP.md).
 
 Maintainers build it from the development repository root with:
 
@@ -62,7 +66,7 @@ Maintainers build it from the development repository root with:
 python3 scripts/packageMuseConnector.py
 ```
 
-The independent package command writes the ZIP, `manifest.json`, and `SHA256SUMS` to `output/mcp-muse-20261010/0.1.0/`. The live connection check above is separate from packaging. Publishing this kit does not submit a connector to Meta or validate arbitrary phone tasks.
+The independent package command writes the ZIP, `manifest.json`, and `SHA256SUMS` to `output/mcp-fast-upload-20261011/packages/muse/0.1.1/`. The live connection check above is separate from packaging. Publishing this kit does not submit a connector to Meta or validate arbitrary phone tasks.
 
 ## Official references
 

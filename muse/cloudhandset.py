@@ -118,7 +118,7 @@ def present_result(result):
                 except (ValueError, TypeError, binascii.Error, OSError):
                     failures.append("image_validation_or_write_failed")
                     return {"type": "image", "error": failures[-1]}
-            return {key: "[redacted]" if key.lower() in ("authorization", "cookie", "set-cookie", "access_token", "refresh_token", "client_secret")
+            return {key: "[redacted]" if key.lower() in ("authorization", "cookie", "set-cookie", "access_token", "refresh_token", "client_secret", "upload_token")
                     else "[binary omitted]" if key in ("data", "blob") and isinstance(item, str)
                     else clean(item) for key, item in value.items()}
         if isinstance(value, str):
@@ -130,7 +130,7 @@ def present_result(result):
             "image_acceptance": "not_verified", "retry_performed": False}
 
 
-def invoke(credential_name, method, tool=None, arguments=None):
+def invoke(credential_name, method, tool=None, arguments=None, *, raw_result=False):
     if not isinstance(credential_name, str) or not credential_name.strip() or len(credential_name) > 256 or any(ord(c) < 32 for c in credential_name):
         raise AdapterError("invalid_credential_name")
     if method not in ("tools/list", "tools/call") or (method == "tools/call" and (
@@ -140,13 +140,13 @@ def invoke(credential_name, method, tool=None, arguments=None):
     payload = {"jsonrpc": "2.0", "id": request_id, "method": method, "params": {"_meta": {
         "io.modelcontextprotocol/protocolVersion": PROTOCOL,
         "io.modelcontextprotocol/clientCapabilities": {},
-        "io.modelcontextprotocol/clientInfo": {"name": "cloudhandset-muse-adapter", "version": "0.1.0"}}}}
+        "io.modelcontextprotocol/clientInfo": {"name": "cloudhandset-muse-adapter", "version": "0.1.1"}}}}
     if method == "tools/call":
         payload["params"].update({"name": tool, "arguments": arguments})
     data = json.dumps(payload, allow_nan=False).encode()
     if len(data) > 65536:
         raise AdapterError("request_too_large")
-    headers = {"User-Agent": "CloudHandset-Muse/0.1.0",
+    headers = {"User-Agent": "CloudHandset-Muse/0.1.1",
                "Content-Type": "application/json", "Accept": "application/json, text/event-stream",
                "Accept-Encoding": "identity", "Mcp-Protocol-Version": PROTOCOL, "Mcp-Method": method}
     if tool:
@@ -168,7 +168,30 @@ def invoke(credential_name, method, tool=None, arguments=None):
         raise AdapterError(f"http_{error.code}") from None
     except (urllib.error.URLError, TimeoutError, OSError):
         raise AdapterError("network_error_outcome_unknown") from None
-    return present_result(parse_response(raw, content_type, request_id))
+    result = parse_response(raw, content_type, request_id)
+    return result if raw_result else present_result(result)
+
+
+def upload_file(credential_name, path, session_id, operation_id):
+    spec = importlib.util.spec_from_file_location("cloudhandset_upload", os.path.join(os.path.dirname(__file__), "upload_file.py"))
+    uploader = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(uploader)
+    metadata = uploader.file_bytes(path)[1]
+    prepared = invoke(credential_name, "tools/call", "device_tool", {
+        "action": "file.upload_begin", "session_id": session_id, "operation_id": operation_id, **metadata,
+    }, raw_result=True)
+    if prepared.get("isError"):
+        return present_result(prepared)
+    ticket = prepared.get("structuredContent", {}).get("upload", {})
+    if not ticket:
+        return {"result": {"isError": True, "session_id": session_id, "operation_id": operation_id, "upload_id": prepared.get("structuredContent", {}).get("result", {}).get("upload_id"), "error_code": "fast_upload_not_supported"}, "images": [], "image_errors": [], "retry_performed": False}
+    context = {key: ticket.get(key) for key in ("session_id", "upload_id", "complete_operation_id")}
+    try:
+        receipt = uploader.send_file(path, ticket)
+        return {"result": receipt, "images": [], "image_errors": [], "retry_performed": False}
+    except Exception as error:
+        return {"result": {"isError": True, **context, "error_code": str(error) if isinstance(error, uploader.UploadError) else "upload_outcome_unknown"},
+                "images": [], "image_errors": [], "retry_performed": False}
 
 
 class Parser(argparse.ArgumentParser):
@@ -185,9 +208,16 @@ def main(argv=None):
         call = commands.add_parser("call")
         call.add_argument("tool")
         call.add_argument("arguments", help="JSON object, with the exact live tool schema")
+        upload = commands.add_parser("upload", help="Prepare and send a local file once; retain the completion operation ID")
+        upload.add_argument("file")
+        upload.add_argument("--session-id", required=True)
+        upload.add_argument("--operation-id", required=True)
         args = parser.parse_args(argv)
-        result = invoke(args.credential_name, "tools/list") if args.command == "tools/list" else invoke(
-            args.credential_name, "tools/call", args.tool, json.loads(args.arguments))
+        if args.command == "upload":
+            result = upload_file(args.credential_name, args.file, args.session_id, args.operation_id)
+        else:
+            result = invoke(args.credential_name, "tools/list") if args.command == "tools/list" else invoke(
+                args.credential_name, "tools/call", args.tool, json.loads(args.arguments))
         print(json.dumps(result, ensure_ascii=False))
         return 2 if result["result"].get("isError") or result["image_errors"] else 0
     except Exception as error:

@@ -4,6 +4,8 @@ Setup kit **0.1.0** · Server interface checked **2026-10-10** against `server/m
 
 These are the server's 12 tools. Muse must discover their live schemas after compatible authentication; this reference does not establish that Muse can call them. The only OAuth scope is `device:control`. There is no read-only scope. Only `list_devices` and `observe` carry the server's top-level read-only hint; treat every other tool, including the mixed-purpose `device_tool`, as potentially consequential and keep host approvals enabled.
 
+Source update (2026-10-11): account connections dynamically list eligible current leases, including newly added phones. Legacy credentials retain single-phone scope. Discover the deployed schema before calling tools.
+
 ## Common inputs and results
 
 - `device_id`, `session_id`, `observation_id`, `upload_id`, `app_id`, and `access_id` are UUIDs obtained from service results. Never invent a phone or session ID.
@@ -57,9 +59,11 @@ All rows require the literal `action` shown. “Read” describes the action's i
 | `airplane.get` | S | Read. Returns airplane-mode status. |
 | `airplane.set` | M + boolean `enabled`, `confirmed: true` | Changes connectivity. Require the user's authorization; `confirmed: true` is an input assertion, not a substitute for permission. |
 | `device.restart` | M + `confirmed: true` | Restarts the phone and may interrupt access. Require the user's authorization. Never use it to clear an unknown operation. |
-| `share.status` | No other inputs | Read. Returns current share IDs, permissions, and expiry/revocation metadata. No session required. |
-| `share.create` / `share.regenerate` | `operation_id`, `permission`: `view` or `control`, `duration`: `24h`, `7d`, or `lease` | Grant-scoped mutation, no session. Both replace existing active shares and stop their matching connections before issuing a new link. Link expiry is capped by grant/lease access. Treat returned `url` as a credential. |
-| `share.revoke` / `share.take_back` | `operation_id`, `access_id` from share status | Grant-scoped mutation, no session. Revokes the specified share and closes its matching share connection. Check returned `closed`/`state`; this is not a replacement for releasing an MCP session. |
+| `share.status` | `device_id` | Read. Returns current share IDs, permissions, and expiry/revocation metadata. No session required. |
+| `share.create` / `share.regenerate` | `device_id`, `operation_id`, `permission`: `view` or `control`, `duration`: `24h`, `7d`, or `lease` | Grant-scoped mutation, no session. Both replace existing active shares and stop their matching connections before issuing a new link. Link expiry is capped by grant/lease access. Treat returned `url` as a credential. |
+| `share.revoke` / `share.take_back` | `device_id`, `operation_id`, `access_id` from share status | Grant-scoped mutation, no session. Revokes the specified share and closes its matching share connection. Check returned `closed`/`state`; this is not a replacement for releasing an MCP session. |
+
+`device_id` is required for every `share.*` action with an account connection; omission is accepted only for legacy single-phone credentials. Refresh `list_devices` for each task and after a phone is added.
 
 File transfers, installations, connectivity changes, restarts, and sharing require task-specific authorization. Sharing can expose control and disconnect an existing recipient. A share link is issued only in the original successful result; a retained receipt does not redisplay the credential. For an uncertain share mutation, read `share.status` and ask the service to resolve any remaining ambiguity. Do not generate another share operation or claim success because a session `operation.status` lookup is unavailable.
 
@@ -75,6 +79,7 @@ Tool failures use `isError: true` and/or `structuredContent.error_code`; HTTP au
 | `invalid_arguments`, `invalid_action_input`, `invalid_coordinates` | Check the live schema and current image geometry. Do not guess coordinates or reuse a changed payload under the same ID. |
 | `observation_stale` | Capture and inspect a fresh image before a new intended action. |
 | `device_busy`, `action_busy`, `stop_pending` | Do not evict a writer or bypass isolation. Resolve the existing operation, wait as appropriate, or report the blocked state. |
+| `device_required` | Call `list_devices`, identify the intended phone, and include its `device_id` for sharing. Do not choose another phone implicitly. |
 | `control_paused` | Respect the customer's takeover. Resume only at the user's request through fresh verification. |
 | HTTP 401, `invalid_grant`, `grant_expired`, `grant_revoked`, `access_ended`, `assignment_changed` | Stop actions. Recheck lease/authorization and use fresh verification only when appropriate; never bypass with cookies or old credentials. Attempt release when permitted and report unconfirmed cleanup. |
 | `session_ended` | Do not reuse the session. Report unresolved prior operations; if a new task is authorized, list the phone and acquire a new session only after availability is confirmed. |
@@ -89,3 +94,15 @@ The server's idempotence hint describes deduplication, not permission to replay 
 Current defaults are **180 ordinary tool calls/minute per credential**, with a separate shared allowance of **60/minute** for `release_control` and `operation.status`. Device observations and most session actions share stricter persisted limits of **2/second and 60/minute per grant**; `file.upload_status` and `operation.status` are exempt from that device-action quota, but still consume their applicable tool-call allowance. New acquisition IDs are limited to **12/minute per lease and 60/minute per user**. Authentication failures are limited separately. Deployments can override the ordinary tool-call limit; always honor the returned delay.
 
 Requests are capped at 64 KiB. Screenshots have a maximum edge of 1280 pixels and a decoded size limit of 2 MiB. An idle session is normally released after five minutes; explicit cleanup is still required when a task ends.
+
+## Fast upload (0.1.1)
+
+Install `upload_file.py` next to `cloudhandset.py`. From the existing private skill, run:
+
+```sh
+python3 bin/cloudhandset.py --credential-name ACTUAL_CREDENTIAL_NAME upload /absolute/path/to/file --session-id ACTUAL_SESSION_ID --operation-id NEW_OPERATION_ID
+```
+
+The command computes the actual file digest, calls authenticated `device_tool` / `file.upload_begin`, then sends one binary PUT with the returned one-use file/session-bound ticket. OAuth credentials remain in the official helper. The ticket never appears in command output. Maximum file size remains 30 MiB. No retries are performed.
+
+Retain `upload_id` and `complete_operation_id`; query `operation.status` with that completion ID until `result.state=succeeded`, matching byte size and returned Android path. A timeout is unknown, not a reason to re-upload. Cancel the original upload when needed, and always release held control. Refresh the intended media picker to verify visibility when requested. Host execution and outbound access to device.cloudhandset.com are required. A begin response without an `upload` ticket means the server or selected Android phone does not support this workflow; do not silently fall back to slow per-chunk calls.
