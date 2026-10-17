@@ -1,6 +1,8 @@
 # CloudHandset for Meta Muse
 
-Setup kit **0.1.1** · Updated **2026-10-11**
+Setup kit **0.1.2** · Updated **2026-10-18**
+
+This version adds [independent multi-phone control](PARALLEL_CONTROL.md) and a paced `parallel` adapter command. Each account may control up to 16 Android phones at once across every client and credential. Workers must be 1–16; a batch covering more than 16 distinct phones is rejected before dispatch, with no automatic splitting. The 16-phone limit is backed by separate service capacity checks; the Muse-host run below used two phones.
 
 Use this kit to prepare a Custom Connector for **Meta Muse, the personal agent**. It contains connection instructions, a Python MCP adapter, and a tool reference. It is not a Muse Code configuration, a native importable plugin, or a Meta-approved directory listing.
 
@@ -8,13 +10,27 @@ Use this kit to prepare a Custom Connector for **Meta Muse, the personal agent**
 
 CloudHandset MCP is available to active customers for their own valid Android phone leases. Authorization covers either the phone selected during login or the current and future Android phone leases explicitly approved by the user. There is no fixed test account or required test phone. Other clients' successful connections do not establish Muse compatibility.
 
+## Validation scope — 2026-10-18
+
+A two-phone run in Muse's own host covered parallel acquisition and observations, explicit normalized-coordinate taps with visible results on both phones, clipboard write/read, and closed/drained release for both sessions. One phone received two consecutive 4,694,656-byte Demo MP4 uploads, reported at 28 seconds each, with the original completion operation succeeded and the active-session check passed before the next file. Muse inspected two videos in Gallery. These timings describe this run, not a speed guarantee.
+
+Some navigation-bar taps on the other phone were accepted but produced no visible change; an in-app back tap succeeded. That isolated behavior remains unexplained. Upload timeout/unknown-result recovery was not triggered in this live run. The separate service test used 1, 4, 8, and 16 phones for 120 seconds per level; it does not establish native 16-phone Muse app workflows.
+
 ## Install through Muse chat
 
-Follow the [five-step installation guide](https://github.com/ziyouzhilong/cloudhandset-mcp/blob/main/MUSE_INSTALL.md): extract the ZIP, attach its five files to Muse, request installation, complete the official connection form with client ID `cloudhandset-muse` and an empty client secret, then let Muse finish the skill and list your phone. The guide includes copyable prompts and a screen-only check. Reuse an existing ready connection.
+Follow the bundled [installation guide](SETUP.md): extract the ZIP and attach its six files to Muse. For a new connection, complete the official form with client ID `cloudhandset-muse` and an empty client secret. Reuse an existing ready connection and keep its private binding.
 
-For an existing installation, replace `cloudhandset.py` and place the new `upload_file.py` beside it. Retain the existing official connector binding. Use `cloudhandset.py upload` as described in [TOOLS.md](TOOLS.md) for one binary transfer; the adapter checks completion separately.
+Before replacing an existing adapter, verify the official helper import in the current Muse runtime and keep a backup of the working adapter. The current official helper path was checked in Muse on 2026-10-18: `/opt/muse/skills/custom-connector-setup/bin/dynamic_credentials.py`. The adapter uses that path first and falls back to the previous official path only when the current file is absent. Missing, unloadable, or incompatible helpers and unavailable credentials return distinct errors before dispatch. Keep the existing private connector binding, place `upload_file.py` beside `cloudhandset.py`, and add `PARALLEL_CONTROL.md` to the skill's instructions. See [SETUP.md](SETUP.md) for migration checks and [TOOLS.md](TOOLS.md) for exact arguments, explicit coordinate conversion, and parallel calls.
 
 On 2026-10-11, the supplied 0.1.1 scripts completed a real 4,694,656-byte MP4 upload from Muse: one binary PUT, completion confirmed, the Android file checksum verified, and control released with `bridge_execution_drained`. The observed begin-to-completion time was 25.567 seconds in that single-account check; transfer speed depends on the host and network.
+
+## Upload completion and recovery
+
+The 0.1.2 adapter sends each file once, then uses a 120-second query budget for the original completion operation by default. Reads check an absolute deadline between available chunks, so a continuous stream cannot extend that budget; a final silent in-flight read can take up to 30 additional seconds to time out. `submitted_to_device` or `running` is not completion. Success requires the matching session, upload and operation IDs, `result.state=succeeded`, the expected byte count, and the generated Android path. A final `file.upload_status` read checks that the same session remains active. `upload_complete=true` records the transfer result; `can_start_next_upload=true` and `session_checked_active=true` apply only at that final check, not indefinitely.
+
+If the deadline expires, the result remains pending and the command exits nonzero. Keep `session_id`, `upload_id`, `complete_operation_id`, and `expected_size`; use `upload-status` in [SETUP.md](SETUP.md) to continue read-only verification. Unknown results, missing operation records, or a closed session do not trigger another PUT or a new upload ID. A transfer already proven complete stays marked complete even when the final active-session check fails. The adapter never starts the next file automatically.
+
+Polling defaults to five seconds per command. One coordinator must share the 60/minute `operation.status`/release allowance across all uploads and reserve room for release. For 16 simultaneous waiters, use at least 40-second intervals and account for initial checks and other calls; separate processes do not combine their local budgets. Honor longer server retry delays. File completion does not itself verify gallery visibility.
 
 ## Detailed setup
 
@@ -41,7 +57,7 @@ See [TOOLS.md](TOOLS.md) for the current server interface and operation rules. T
 
 There is no separate read-only OAuth scope. Tool read/write classifications are operational guidance, not narrower token permissions. If Muse requires DCR, a client metadata document, a secret, or another flow, report that requirement and stop until CloudHandset confirms a supported configuration. Do not invent a callback, reuse another client's ID or localhost callback, pass website cookies, share tokens, or weaken callback validation.
 
-Authorization lasts at most **30 days** and never beyond the effective phone lease. Expiry requires fresh verification; automatic Muse login prompts have not been verified. Releasing control leaves the authorization valid. A customer's handback pauses agent control; resume only when the user requests it and completes fresh verification.
+Authorization lasts at most **30 days** and never beyond the effective phone lease. Expiry requires fresh verification; automatic Muse login prompts have not been verified. Releasing control leaves the authorization valid. Customer take-back ends the current Agent session while preserving valid authorization. After the customer leaves or disconnects and the phone is available, an already authorized task can acquire a new session with the same connector, without signing in again. Inspect a fresh screenshot and do not replay interrupted actions.
 
 ## What counts as a successful connection check
 
@@ -58,7 +74,7 @@ For support, provide the Muse version, timestamp and timezone, connection stage,
 
 ## Package contents
 
-`cloudhandset-muse-setup-0.1.1.zip` contains only `README.md`, `SETUP.md`, `TOOLS.md`, `cloudhandset.py`, and `upload_file.py` under `cloudhandset-muse/`. It includes no credentials or guessed import manifest. The Python script runs inside Muse's execution environment with its official credential helper; see the installation steps in [SETUP.md](SETUP.md).
+`cloudhandset-muse-setup-0.1.2.zip` contains only `README.md`, `SETUP.md`, `TOOLS.md`, `PARALLEL_CONTROL.md`, `cloudhandset.py`, and `upload_file.py` under `cloudhandset-muse/`. It includes no credentials or guessed import manifest. The Python script runs inside Muse's execution environment with its official credential helper; see the installation steps in [SETUP.md](SETUP.md).
 
 Maintainers build it from the development repository root with:
 
@@ -66,7 +82,7 @@ Maintainers build it from the development repository root with:
 python3 scripts/packageMuseConnector.py
 ```
 
-The independent package command writes the ZIP, `manifest.json`, and `SHA256SUMS` to `output/mcp-fast-upload-20261011/packages/muse/0.1.1/`. The live connection check above is separate from packaging. Publishing this kit does not submit a connector to Meta or validate arbitrary phone tasks.
+The independent package command produces the six-file setup ZIP, `manifest.json`, and `SHA256SUMS`. Validation results above apply to their stated versions, hosts, phone counts, and workflows.
 
 ## Official references
 

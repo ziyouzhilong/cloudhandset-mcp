@@ -1,6 +1,6 @@
 # CloudHandset MCP tool reference
 
-Setup kit **0.1.0** · Server interface checked **2026-10-10** against `server/mcpToolSchemas.ts` and `server/mcpServer.ts`, with execution semantics from `agentControlService.ts` and the device services.
+Setup kit **0.1.2** · Tool reference originally checked **2026-10-10** against `server/mcpToolSchemas.ts` and `server/mcpServer.ts`, with execution semantics from `agentControlService.ts` and the device services. Parallel workflow added **2026-10-18**; discover the deployed schemas before use.
 
 These are the server's 12 tools. Muse must discover their live schemas after compatible authentication; this reference does not establish that Muse can call them. The only OAuth scope is `device:control`. There is no read-only scope. Only `list_devices` and `observe` carry the server's top-level read-only hint; treat every other tool, including the mixed-purpose `device_tool`, as potentially consequential and keep host approvals enabled.
 
@@ -11,8 +11,8 @@ Source update (2026-10-11): account connections dynamically list eligible curren
 - `device_id`, `session_id`, `observation_id`, `upload_id`, `app_id`, and `access_id` are UUIDs obtained from service results. Never invent a phone or session ID.
 - `operation_id` is 1–64 ASCII letters, digits, underscores, or hyphens. Use a new ID per new intended mutation; retain the original ID and payload for resolving uncertainty. Reusing an ID with changed arguments causes `operation_conflict`.
 - In the tables, **S** means `session_id`; **M** means `session_id` + `operation_id`; **O** means M + `observation_id`. These are abbreviations for documentation, not literal JSON fields. Unlisted input fields are rejected.
-- Coordinates are integers in the current screenshot's pixel space, bounded by its actual width and height; the schema also caps each coordinate at 16384. The server scales them to the control surface. Do not rescale on the client.
-- Observations expire after at most 30 seconds and become invalid after a session mutation. Serialize actions and observe again before the next coordinate/text action.
+- Coordinates sent to MCP are integers in the current screenshot's pixel space, bounded by its actual width and height; the schema also caps each coordinate at 16384. The server scales them to the control surface. The adapter leaves screenshot pixels unchanged. Its explicit `normalized_1000` option below converts model coordinates to screenshot pixels once; never convert to control-surface dimensions yourself.
+- Observations expire after at most 30 seconds and become invalid after a session mutation. Serialize actions within each phone and observe again before the next coordinate/text action; different phones may run concurrently.
 - Results include text and `structuredContent` metadata. `observe` also returns a native MCP `content` image block (`image/png` or `image/jpeg`); only metadata appears under `structuredContent.image`. There is no audio result.
 - Operation receipts can include `operation_id`, `session_id`, `action`, `state`, `evidence`, `error_code`, `job_id`, `result`, `retry_safe`, and `ui_outcome`. `submitted_to_device` and `ui_outcome: "not_evaluated"` do not prove task completion. Inspect the actual resulting screen and any relevant job result.
 
@@ -34,6 +34,29 @@ Source update (2026-10-11): account connections dynamically list eligible curren
 | `device_tool` | `action` + the exact inputs below | Mixed read and write capabilities. No arbitrary shell, arbitrary URL fetch, or arbitrary APK installation. |
 
 Acquire only a user-selected phone for an authorized task. A list-only request must not acquire it. A first connection check uses only list, acquire, observe, release. If the model cannot inspect the image, do not perform visual actions. When finished, canceled, or blocked, release held inputs and attempt `release_control`; report unconfirmed closure.
+
+## Exact read/release arguments and coordinate options
+
+Use these exact read/release shapes, replacing the placeholder with the session returned for the intended Android phone:
+
+```sh
+python3 bin/cloudhandset.py --credential-name ACTUAL_CREDENTIAL_NAME call device_tool '{"action":"clipboard.read","session_id":"ACTUAL_SESSION_ID"}'
+python3 bin/cloudhandset.py --credential-name ACTUAL_CREDENTIAL_NAME call release_control '{"session_id":"ACTUAL_SESSION_ID"}'
+```
+
+Neither call accepts `operation_id` or `observation_id`. The adapter rejects missing/extra fields before loading the credential helper or sending a request, with `dispatch_state: "not_dispatched"`, `allowed_fields`, and a correction hint. It never silently removes extra fields. This focused preflight also checks visual-action fields, position values, and supplied session/observation/operation ID formats; the deployed schema remains authoritative for other actions and server-side ownership checks.
+
+The default coordinate unit is **screenshot pixels**. No option is required and values are not guessed or rescaled. If the model explicitly produced positions in a **0–1000 coordinate space**, use:
+
+```sh
+python3 bin/cloudhandset.py --credential-name ACTUAL_CREDENTIAL_NAME call tap '{"session_id":"ACTUAL_SESSION_ID","operation_id":"NEW_OPERATION_ID","observation_id":"ACTUAL_OBSERVATION_ID","x":999,"y":1000}' --coordinate-space normalized_1000 --observation 'CURRENT_OBSERVE_STRUCTURED_CONTENT_JSON'
+```
+
+Replace `CURRENT_OBSERVE_STRUCTURED_CONTENT_JSON` with the current `observe` result's complete `structuredContent` object. Its `session_id` and `observation_id` must match the action, `expires_at` must still be current, and `image_width`/`image_height` must be the actual screenshot dimensions. Do not substitute `control_width`/`control_height`, another phone's observation, or assumed dimensions. The adapter cannot establish what a model intended from numbers alone: select one unit for the whole action and do not mix units among points.
+
+In `normalized_1000` mode, all position coordinates must be finite numbers in the inclusive range 0–1000. The adapter produces `min(size - 1, floor(value * size / 1000))`; therefore 1000 maps to the last valid pixel, never to `width` or `height`. For an actual 591-pixel-wide image, x=999 becomes 590 even if the control surface is 590 pixels wide. This is the only client conversion. `tap` and `scroll` convert x/y; `swipe` converts all start/end positions; `gesture` converts every point's x/y. Scroll `deltaX`/`deltaY`, gesture times, and duration retain their documented server units. NaN, infinity, out-of-range positions, per-point unit markers, and local metadata inside tool arguments are rejected.
+
+`--coordinate-space screenshot_pixels --observation 'CURRENT_OBSERVE_STRUCTURED_CONTENT_JSON'` can also check the current image bounds without converting. Coordinate options are only accepted for `tap`, `swipe`, `gesture`, and `scroll`. Local metadata never goes to MCP. Observe again after a mutation and inspect the new image before preparing the next visual step.
 
 ## `device_tool` actions
 
@@ -67,6 +90,8 @@ All rows require the literal `action` shown. “Read” describes the action's i
 
 File transfers, installations, connectivity changes, restarts, and sharing require task-specific authorization. Sharing can expose control and disconnect an existing recipient. A share link is issued only in the original successful result; a retained receipt does not redisplay the credential. For an uncertain share mutation, read `share.status` and ask the service to resolve any remaining ambiguity. Do not generate another share operation or claim success because a session `operation.status` lookup is unavailable.
 
+Customer take-back ends the current session while preserving valid authorization. Once the customer leaves or disconnects and `list_devices` reports availability, an already authorized task can acquire a new session with the same connector and inspect a fresh screenshot. Respect `device_busy` / `stop_pending` during control handover. Never replay an interrupted or uncertain operation.
+
 ## Errors and retries
 
 Tool failures use `isError: true` and/or `structuredContent.error_code`; HTTP authentication failures may instead return an HTTP error. Inspect receipt state and `result` as well. Do not assume a successful transport means the phone task succeeded.
@@ -80,7 +105,7 @@ Tool failures use `isError: true` and/or `structuredContent.error_code`; HTTP au
 | `observation_stale` | Capture and inspect a fresh image before a new intended action. |
 | `device_busy`, `action_busy`, `stop_pending` | Do not evict a writer or bypass isolation. Resolve the existing operation, wait as appropriate, or report the blocked state. |
 | `device_required` | Call `list_devices`, identify the intended phone, and include its `device_id` for sharing. Do not choose another phone implicitly. |
-| `control_paused` | Respect the customer's takeover. Resume only at the user's request through fresh verification. |
+| `control_paused` | Automation was explicitly paused. Resume only at the user's request through the supported verification flow; ordinary take-back does not set this flag. |
 | HTTP 401, `invalid_grant`, `grant_expired`, `grant_revoked`, `access_ended`, `assignment_changed` | Stop actions. Recheck lease/authorization and use fresh verification only when appropriate; never bypass with cookies or old credentials. Attempt release when permitted and report unconfirmed cleanup. |
 | `session_ended` | Do not reuse the session. Report unresolved prior operations; if a new task is authorized, list the phone and acquire a new session only after availability is confirmed. |
 | `capture_failed`, `invalid_device_image`, `capability_not_supported` | Report the missing capability or image. Stop visual actions and release the session; do not substitute invented screen state. |
@@ -106,3 +131,39 @@ python3 bin/cloudhandset.py --credential-name ACTUAL_CREDENTIAL_NAME upload /abs
 The command computes the actual file digest, calls authenticated `device_tool` / `file.upload_begin`, then sends one binary PUT with the returned one-use file/session-bound ticket. OAuth credentials remain in the official helper. The ticket never appears in command output. Maximum file size remains 30 MiB. No retries are performed.
 
 Retain `upload_id` and `complete_operation_id`; query `operation.status` with that completion ID until `result.state=succeeded`, matching byte size and returned Android path. A timeout is unknown, not a reason to re-upload. Cancel the original upload when needed, and always release held control. Refresh the intended media picker to verify visibility when requested. Host execution and outbound access to device.cloudhandset.com are required. A begin response without an `upload` ticket means the server or selected Android phone does not support this workflow; do not silently fall back to slow per-chunk calls.
+
+## Parallel calls (0.1.2)
+
+Read [PARALLEL_CONTROL.md](PARALLEL_CONTROL.md) before a multiple-phone task. The adapter runs one explicit step for each distinct phone and returns every result independently. It does not run an autonomous observe/action loop, retry a failed request, or release sessions automatically.
+
+```sh
+python3 bin/cloudhandset.py --credential-name ACTUAL_CREDENTIAL_NAME parallel 'BATCH_JSON' --workers CONCURRENT_REQUESTS --calls-per-minute ORDINARY_BUDGET
+```
+
+Replace `BATCH_JSON` with an object of this shape. Every placeholder ID must be replaced by the actual UUID from this task's list/acquire results:
+
+```json
+{
+  "sessions": {"DEVICE_A_UUID": "SESSION_A_UUID", "DEVICE_B_UUID": "SESSION_B_UUID"},
+  "requests": [
+    {"device_id": "DEVICE_A_UUID", "tool": "observe", "arguments": {"session_id": "SESSION_A_UUID"}},
+    {"device_id": "DEVICE_B_UUID", "tool": "observe", "arguments": {"session_id": "SESSION_B_UUID"}}
+  ]
+}
+```
+
+`sessions` is the device-to-session map obtained from successful acquisitions by this task. Duplicate phones, aliased sessions, or mismatched mappings are rejected before dispatch. For acquisition, omit those phones from `sessions`, set each job's tool to `acquire_control`, and supply the matching `device_id` plus a fresh `operation_id` inside `arguments`. Add successful returned sessions to the map. A failed acquisition retains its original operation ID in that phone's result for later recovery.
+
+`arguments` uses the discovered live schema. It is forwarded unchanged in the default screenshot-pixel mode. The outer job's `device_id` is only a correlation field. For a visual action, also add `observation_expires_at` on the **outer job**, copied from that phone's latest observed `expires_at`; it is not a tool argument. The adapter checks it again while waiting for dispatch and stops at least one second before expiry. Inspect each returned image with `muse.read` before preparing that phone's next action. The server still validates observation ownership and freshness.
+
+To use explicit normalized positions in a parallel job, put `"coordinate_space": "normalized_1000"` and `"observation": CURRENT_OBSERVE_STRUCTURED_CONTENT_OBJECT` on that **outer job**, alongside `device_id`, `tool`, and `arguments`. The same single-call conversion and phone/session/observation checks apply. Expiry is taken from that observation; if `observation_expires_at` is also supplied, the two timestamps must match. All jobs pass local preflight before any job is sent. Each position is converted once, and the local metadata is never forwarded to the server. Queued expiry checks still run after conversion.
+
+`--workers` is required and must be 1–16. The union of distinct phone IDs in `sessions` and `requests` must contain at most 16 phones; oversized input is rejected before any credential helper or network call, without automatic splitting. A batch can contain more phones than its worker count, up to that limit. The server separately enforces at most 16 controlled phones for the whole account, including other tasks, clients, and credentials; reserving/stopping/isolating sessions still count until closed and drained. On `account_device_limit_reached`, the command preserves the response and operation ID, stops queued acquisitions, and performs no automatic retry. Explicitly acquire again only after your own sessions have been released and capacity is free.
+
+`--calls-per-minute` is required, ranges from 1 to 180, and spaces ordinary dispatches within this batch. Acquisitions are additionally spaced at least one second apart for the shared account acquisition quota. Leave headroom for other calls. Release/status use a separate shared 60/minute allowance, with release dispatched first. The command stops queued calls in a bucket when it receives a rate-limit result, retains the returned delay, and does not replay them. Already dispatched requests finish independently. Neither the worker count nor another credential increases the account's 16-phone allowance.
+
+Pacing is local to this process. Run one coordinator per connection, account for ordinary single calls/uploads, and wait at least the returned `pacing.next_batch_delay_seconds` for the applicable bucket before starting another batch. Honor a server retry delay if it is longer. Running independent commands concurrently does not combine their quotas. Keep file transfers in the existing `upload` workflow per phone; do not mix another step into that phone's pending upload.
+
+Read `result.results` per phone: each item retains its device, session, and operation correlation fields, `dispatch_state`, and its own `response.images` / `image_errors`. Image paths are unique and private; top-level `images` is empty for a batch. Exit status 2 means at least one result failed; successful results and held sessions still need handling. On keyboard interruption, queued calls stop and in-flight calls finish so their receipts can be returned. `not_dispatched` items can be planned again only after their stated cause is resolved; never infer that an `outcome_unknown` action was not executed.
+
+Cleanup is an explicit batch with one `release_control` job per session held by this task and only `session_id` in each job's arguments. Check closed/drained evidence for each response. A transport-successful batch is not proof of either task completion or release. Return per-phone outcomes even when one phone fails. Grant-scoped sharing and catalog calls stay outside the parallel command.
