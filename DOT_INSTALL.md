@@ -1,12 +1,12 @@
 # CloudHandset for OpenAI Dot
 
-Version 0.2.3. Connect Dot to the Android phones covered by your CloudHandset leases, then install the phone-operation skill. Each customer connects their own account. The public download contains no account connection or login credentials.
+Version 0.2.4. Connect Dot to the Android phones covered by your CloudHandset leases, then install the phone-operation skill. Each customer connects their own account. The public download contains no account connection or login credentials.
 
-This version adds a packaged Python uploader and [fast file upload](DOT_UPLOAD.md): one binary transfer through the original CloudHandset upload writer, with a 30 MiB limit. Refresh stale tools after the server update. Uploaded files arrive in Android Files/Downloads under `Download/CloudHandset`.
+Version 0.2.4 adds independent multi-phone workflows, shared-budget scheduling, and per-phone outcomes and cleanup. An account can control at most 16 phones at once across all clients. Keep the existing [fast uploader](DOT_UPLOAD.md), with one binary transfer and a 30 MiB limit. Refresh stale tool schemas and read the [parallel-control reference](PARALLEL_CONTROL.md) before a multi-phone task.
 
 ## Upgrade from an earlier version
 
-Keep your existing working CloudHandset connection. On its management page, refresh its MCP tools so `device_tool` exposes the upload arguments. Download and extract the 0.2.3 setup kit, then follow steps 2 and 3 below using the **same connection's technical app ID**. On your existing CloudHandset plugin page, choose **More → Upload new version** and upload the newly generated `cloudhandset-dot-connected.zip`. Confirm version **0.2.3**, one connected CloudHandset app, and one android-phone skill. Reconnect only if your account authorization has expired; updating the skill does not require creating another connection.
+Keep your existing working CloudHandset connection. On its management page, refresh its MCP tools so `device_tool` exposes the upload arguments. Download and extract the 0.2.4 setup kit, then follow steps 2 and 3 below using the **same connection's technical app ID**. On your existing CloudHandset plugin page, choose **More → Upload new version** and upload the newly generated `cloudhandset-dot-connected.zip`. Confirm version **0.2.4**, one connected CloudHandset app, and one android-phone skill. Reconnect only if your account authorization has expired; updating the skill does not require creating another connection.
 
 If Dot still reports missing upload parameters, refresh/rediscover that existing connection's tools and start a new task with the updated skill. Use the fast-upload reference for the one-transfer workflow, completion checks, and media-picker verification. Do not silently fall back to hundreds of per-chunk tool calls.
 
@@ -36,11 +36,11 @@ Open [ChatGPT Plugins](https://chatgpt.com/plugins), choose **Add → Create cus
 
 The displayed callback must match this value exactly. If it differs or the required settings are unavailable, contact CloudHandset support; do not substitute a callback or invent a client secret. The client ID is a public application identifier, not a password.
 
-Create the connection and complete **Verify and connect** in the independent CloudHandset login window. Use your own account there; never paste passwords, verification codes, tokens, or complete OAuth callback URLs into a chat. Authorization lasts at most 30 days, and each phone requires a valid effective lease. Choose **Current and future Android phone leases** to include eligible phones added during this fixed authorization, or **Only one selected Android phone** for access to one phone. Existing single-phone connections do not expand automatically: reconnect once to opt in, then refresh the tools and call `list_devices` again. Each phone still requires an effective lease; account scope does not resume a manually paused phone. When it expires, reconnect through the login window.
+Create the connection and complete **Verify and connect** in the independent CloudHandset login window. Use your own account there; never paste passwords, verification codes, tokens, or complete OAuth callback URLs into a chat. Authorization lasts at most 30 days, and each phone requires a valid effective lease. Choose **Current and future Android phone leases** to include eligible phones added during this fixed authorization, or **Only one selected Android phone** for access to one phone. Existing single-phone connections do not expand automatically: reconnect once to opt in, then refresh the tools and call `list_devices` again. Each phone still requires an effective lease; account scope does not clear an explicit automation stop. When it expires, reconnect through the login window.
 
 ## 2. Bind your copy of the skill
 
-Extract `cloudhandset-dot-setup-0.2.3.zip`. In the extracted `cloudhandset-dot/` folder, find `bind-connection.py` and `plugin/`.
+Extract `cloudhandset-dot-setup-0.2.4.zip`. In the extracted `cloudhandset-dot/` folder, find `bind-connection.py` and `plugin/`.
 
 Open the newly created CloudHandset connection's management page and copy its technical app ID. It must have the form `asdk_app_…` or `plugin_asdk_app_…`. Use the real ID from your connection, not the display name or a hosted plugin's `Plugin_…` ID.
 

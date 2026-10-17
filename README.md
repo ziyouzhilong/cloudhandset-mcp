@@ -13,10 +13,10 @@ Connect your own Codex, OpenAI Dot, or Meta Muse to the physical Android phones 
 | Client | Current package | Get started |
 | --- | --- | --- |
 | Codex | [CloudHandset for Codex 0.1.3](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.11/cloudhandset-codex-plugin-0.1.3.zip) | [Installation guide](CODEX_INSTALL.md) |
-| OpenAI Dot | [CloudHandset for Dot 0.2.3](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.11/cloudhandset-dot-setup-0.2.3.zip) | [Installation and upgrade](DOT_INSTALL.md) · [File upload](DOT_UPLOAD.md) · [First screen check](DOT_SETUP.md) |
-| Meta Muse | [CloudHandset for Muse 0.1.1](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.11/cloudhandset-muse-setup-0.1.1.zip) | [Installation guide](MUSE_INSTALL.md) · Single-account screen check passed |
+| OpenAI Dot | [CloudHandset for Dot 0.2.4](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.18/cloudhandset-dot-setup-0.2.4.zip) | [Installation and upgrade](DOT_INSTALL.md) · [File upload](DOT_UPLOAD.md) · [First screen check](DOT_SETUP.md) |
+| Meta Muse | [CloudHandset for Muse 0.1.2](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.18/cloudhandset-muse-setup-0.1.2.zip) | [Installation guide](MUSE_INSTALL.md) · [Parallel control](PARALLEL_CONTROL.md) |
 
-Download the ZIP for your client. For Codex and Dot, upload it to a Codex conversation in Work mode for setup assistance, or extract it and follow the manual guide. For Muse, follow its dedicated setup guide. Verify the original downloads with [SHA256SUMS](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.11/SHA256SUMS). GitHub's automatically generated **Source code** archives contain repository files; choose the named setup ZIP for your client.
+Download the ZIP for your client. For Codex and Dot, upload it to a Codex conversation in Work mode for setup assistance, or extract it and follow the manual guide. For Muse, follow its dedicated setup guide. Verify the original downloads with [SHA256SUMS](SHA256SUMS). Codex 0.1.3 keeps its original release and checksum; the new Dot and Muse assets are in the [2026-10-18 release](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/tag/plugins-2026.10.18). GitHub's automatically generated **Source code** archives contain repository files; choose the named setup ZIP for your client.
 
 These public packages contain no login credentials or pre-bound customer connection. Every customer signs in with their own CloudHandset account. The Dot ZIP is a setup kit: create your account connection, bind its technical ID, and generate the smaller archive to upload to ChatGPT Plugins.
 
@@ -81,7 +81,7 @@ Existing Codex users: follow [the upgrade steps](CODEX_INSTALL.md#upgrade-an-exi
 
 ## Install for Dot
 
-**Upgrading an earlier Dot version?** Keep the working CloudHandset connection, refresh its MCP tools, and bind the extracted 0.2.3 kit to the same technical app ID. Generate the archive using steps 3–4 below, then choose **More → Upload new version** on your existing plugin. Verify version 0.2.3, one connected app, and one android-phone skill. See [upgrade instructions](DOT_INSTALL.md#upgrade-from-an-earlier-version) and the [file-upload reference](DOT_UPLOAD.md).
+**Upgrading an earlier Dot version?** Keep the working CloudHandset connection, refresh its MCP tools, and bind the extracted 0.2.4 kit to the same technical app ID. Generate the archive using steps 3–4 below, then choose **More → Upload new version** on your existing plugin. Verify version 0.2.4, one connected app, and one android-phone skill. See [upgrade instructions](DOT_INSTALL.md#upgrade-from-an-earlier-version) and the [file-upload reference](DOT_UPLOAD.md).
 
 Alternatively, upload the entire setup ZIP to a Codex conversation in **Work mode** and ask Codex to help you install it. You still need to complete your own account verification; the full setup ZIP is a chat attachment for setup assistance, not the archive to import through ChatGPT Plugins.
 
@@ -112,7 +112,19 @@ Start with the [Dot screen-check prompt](DOT_SETUP.md). The [complete Dot instal
 
 ## Set up Meta Muse
 
-CloudHandset for **Meta Muse 0.1.1** uses Muse's Custom Connector and official credential helper. Download the ZIP, attach its five files (`README.md`, `SETUP.md`, `TOOLS.md`, `cloudhandset.py`, `upload_file.py`) to a Muse conversation, and follow the [installation and upgrade guide](MUSE_INSTALL.md). Muse installs both scripts side by side; you complete your own CloudHandset login if needed. An existing valid connector can be retained when upgrading.
+CloudHandset for **Meta Muse 0.1.2** uses Muse's Custom Connector and official credential helper. Download the ZIP, attach its six files (`README.md`, `SETUP.md`, `TOOLS.md`, `PARALLEL_CONTROL.md`, `cloudhandset.py`, `upload_file.py`) to a Muse conversation, and follow the [installation and upgrade guide](MUSE_INSTALL.md). Muse installs both scripts side by side; you complete your own CloudHandset login if needed. An existing valid connector can be retained when upgrading.
+
+## Parallel phone work
+
+Dot 0.2.4 and Muse 0.1.2 keep a separate session, observation, operation history, result, and release record for each Android phone. Different phones can progress in parallel; steps on the same phone remain ordered. Busy phones stay with their current operator. Give the agent the selected phone names and the task for each phone.
+
+The service permits **at most 16 simultaneously controlled Android phones per account**, shared across all clients, connections, credentials, and tasks. You can own or list more phones. Capacity becomes available only after a session is confirmed closed and drained. A larger worker setting, another connection, or another agent does not increase this limit. Use one coordinator to share rate limits and reserve capacity for release. See [parallel-control instructions](PARALLEL_CONTROL.md).
+
+Dot uses its host's native parallel tools when available; otherwise it must report interleaved execution. Muse provides an explicitly bounded and paced `parallel` command. Neither client retries uncertain phone actions automatically. Report the outcome and cleanup separately for every phone, including partial failures.
+
+## Validation scope — 2026-10-18
+
+Service capacity was checked at 1, 4, 8, and 16 phones for 120 seconds per level. Dot 0.2.4 was installed in the existing cloud plugin; Codex exercised its existing authenticated Dot connection with two concurrent phone sessions, separate screen checks, Settings/Home actions, and closed/drained release. Muse's own host exercised two phones in parallel, explicit normalized-coordinate taps, clipboard write/read, and two consecutive 4,694,656-byte Demo MP4 uploads on one phone, reported at 28 seconds each. Both uploads completed with the active-session check passed, both videos were inspected in Gallery, and both phone sessions were closed and drained. These were two-phone client checks, not native 16-phone app-workflow tests. Upload recovery after an unknown result was not triggered. Some navigation-bar taps on one Muse test phone produced no visible change despite acceptance; an in-app back tap worked. That isolated behavior remains unexplained.
 
 ## Fast file upload
 
@@ -122,11 +134,11 @@ A 4,694,656-byte Demo MP4 completed upload, checksum and media-index checks in t
 
 ## How account access works
 
-The MCP endpoint is `https://device.cloudhandset.com/mcp`. Your client opens an independent English verification window for your CloudHandset login. Enter your credentials there, not in an agent conversation. Choose **Current and future Android phone leases** to include eligible phones added during this fixed authorization, or **Only one selected Android phone** for access to one phone. Existing single-phone connections do not expand automatically: reconnect once to opt in, then refresh the tools and call `list_devices` again. Each phone still requires an effective lease; account scope does not resume a manually paused phone.
+The MCP endpoint is `https://device.cloudhandset.com/mcp`. Your client opens an independent English verification window for your CloudHandset login. Enter your credentials there, not in an agent conversation. Choose **Current and future Android phone leases** to include eligible phones added during this fixed authorization, or **Only one selected Android phone** for access to one phone. Existing single-phone connections do not expand automatically: reconnect once to opt in, then refresh the tools and call `list_devices` again. Each phone still requires an effective lease; account scope does not clear an explicit automation stop.
 
 Authorization lasts **up to 30 days**. Each phone requires an effective lease; single-phone access ends no later than that lease. When it expires, complete a new verification flow before continuing. Reauthentication cannot extend a phone lease. There is no separate Agent/MCP authorization page in the CloudHandset website console.
 
-Each phone has one active controller. When a person takes control back through CloudHandset, the agent must stop. Resuming agent control requires an explicit request and fresh verification. At the end of a task, the agent should confirm that its control session is closed and drained.
+Each phone has one active controller. When a person takes control back through CloudHandset, the agent must stop. Take-back preserves valid authorization. Leaving the control page, backgrounding or closing it, or disconnecting releases the customer's session. Once it is closed and the short handover window has passed, an already authorized task can acquire a new Agent session with the same connection, without another login. The agent must inspect a fresh screenshot and must not replay interrupted actions. At the end of a task, the agent should confirm that its control session is closed and drained.
 
 ## FAQ
 

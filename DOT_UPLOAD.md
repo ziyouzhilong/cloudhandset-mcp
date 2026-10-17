@@ -1,6 +1,6 @@
 # CloudHandset file upload — Codex, Dot and Muse
 
-Included in Codex **0.1.3**, Dot **0.2.3**, and Muse **0.1.1**. Codex and Dot use `scripts/upload_file.py` in the installed skill. Muse uses its `cloudhandset.py upload` command; see the [Muse tool reference](muse/TOOLS.md#fast-upload-011).
+Included in Codex **0.1.3**, Dot **0.2.4**, and Muse **0.1.2**. Codex and Dot use `scripts/upload_file.py` in the installed skill. Muse uses its `cloudhandset.py upload` command; see the [Muse tool reference](muse/TOOLS.md#fast-upload-011).
 
 Suggested request: “Upload my attached file to [PHONE NAME] using the packaged fast uploader. Verify completion and the returned Android path, check the intended media picker if needed, and release control. Do not publish anything.”
 
@@ -19,3 +19,9 @@ The transfer uses an independent 4 MiB/s byte budget and continuously sends the 
 If the current tools do not expose `file.upload_begin`, refresh the existing connection's tools and reload the updated skill. If the begin response does not include an `upload` ticket, the server or selected Android phone does not support this workflow. Report that specific gap. The older `file.upload_begin/chunk/complete` protocol remains compatible, but do not silently fall back to hundreds of slow tool calls.
 
 The host must be able to read the selected file and run the packaged uploader. A local path is read by the host helper, never by the remote MCP server. If that execution/file capability is unavailable, report it; do not invent file bytes or substitute an arbitrary URL fetch.
+
+## Muse 0.1.2 completion checks
+
+The `upload` wrapper verifies the original completion operation instead of treating submission as success. Its default query budget is 120 seconds, checked between available response chunks; a final silent in-flight read can take up to 30 additional seconds to time out. Success requires matching session/upload/operation IDs, `succeeded`, the expected byte count, and the generated Android path. A final read checks whether that session is still active. A completed transfer stays complete if the later session check fails, but the agent must not assume it can start another upload.
+
+For pending or uncertain results, keep `session_id`, `upload_id`, `complete_operation_id`, and `expected_size` and use the read-only `upload-status` command in [SETUP.md](muse/SETUP.md). Never repeat PUT or create another upload ID to resolve an unknown result. Polling and releases share the connection's control-call budget; see [PARALLEL_CONTROL.md](PARALLEL_CONTROL.md) before running multiple waiters. Completion does not itself prove gallery visibility or app publication.
