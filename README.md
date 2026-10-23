@@ -2,11 +2,11 @@
 
 **Give your AI agent a real Android phone.**
 
-Connect your own Codex, OpenAI Dot, or Meta Muse to the physical Android phones covered by your CloudHandset leases. Your agent can inspect the screen, perform the task you request, verify the visible result, and release control when finished.
+Connect your own Codex, OpenAI Dot, Meta Muse, or Grok Bot to the physical Android phones covered by your CloudHandset leases. Your agent can inspect the screen, perform the task you request, verify the visible result, and release control when finished.
 
-[CloudHandset website](https://www.cloudhandset.com) · [Codex installation](CODEX_INSTALL.md) · [Dot installation](DOT_INSTALL.md) · [Muse installation](MUSE_INSTALL.md) · [Releases](https://github.com/ziyouzhilong/cloudhandset-mcp/releases) · [Changelog](CHANGELOG.md) · [Support](SUPPORT.md)
+[CloudHandset website](https://www.cloudhandset.com) · [Codex installation](CODEX_INSTALL.md) · [Dot installation](DOT_INSTALL.md) · [Muse installation](MUSE_INSTALL.md) · [Grok Bot installation](GROK_INSTALL.md) · [Releases](https://github.com/ziyouzhilong/cloudhandset-mcp/releases) · [Changelog](CHANGELOG.md) · [Support](SUPPORT.md)
 
-**Required model for Codex and Dot phone operation:** Select **GPT-6.1 Sol or a more capable model** before asking Codex or Dot to operate the phone. This requirement applies to phone operation, not plugin installation. Muse uses its host-provided model; this kit does not select or replace that model.
+**Required model for Codex and Dot phone operation:** Select **GPT-6.1 Sol or a more capable model** before asking Codex or Dot to operate the phone. This requirement applies to phone operation, not plugin installation. Muse and Grok Bot use their host-provided models; this kit does not select or replace that model.
 
 ## Download
 
@@ -15,8 +15,9 @@ Connect your own Codex, OpenAI Dot, or Meta Muse to the physical Android phones 
 | Codex | [CloudHandset for Codex 0.1.3](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.11/cloudhandset-codex-plugin-0.1.3.zip) | [Installation guide](CODEX_INSTALL.md) |
 | OpenAI Dot | [CloudHandset for Dot 0.2.4](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.18/cloudhandset-dot-setup-0.2.4.zip) | [Installation and upgrade](DOT_INSTALL.md) · [File upload](DOT_UPLOAD.md) · [First screen check](DOT_SETUP.md) |
 | Meta Muse | [CloudHandset for Muse 0.1.2](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.18/cloudhandset-muse-setup-0.1.2.zip) | [Installation guide](MUSE_INSTALL.md) · [Parallel control](PARALLEL_CONTROL.md) |
+| Grok Bot | [CloudHandset for Grok Bot 0.1.1](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.23/cloudhandset-grok-bot-plugin-0.1.1.zip) | [Custom MCP and personal-skill setup](GROK_INSTALL.md) |
 
-Download the ZIP for your client. For Codex and Dot, upload it to a Codex conversation in Work mode for setup assistance, or extract it and follow the manual guide. For Muse, follow its dedicated setup guide. Verify the original downloads with [SHA256SUMS](SHA256SUMS). Codex 0.1.3 keeps its original release and checksum; the new Dot and Muse assets are in the [2026-10-18 release](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/tag/plugins-2026.10.18). GitHub's automatically generated **Source code** archives contain repository files; choose the named setup ZIP for your client.
+Download the ZIP for your client. For Codex and Dot, upload it to a Codex conversation in Work mode for setup assistance, or extract it and follow the manual guide. For Muse and Grok Bot, follow their dedicated setup guides. Grok Bot uses a custom MCP connection and a personal skill; its ZIP is not a direct catalog import. Verify the original downloads with [SHA256SUMS](SHA256SUMS). Codex 0.1.3 keeps its original release and checksum; Dot and Muse assets remain in the [2026-10-18 release](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/tag/plugins-2026.10.18). Grok Bot 0.1.1 is in the [2026-10-23 release](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/tag/plugins-2026.10.23). GitHub's automatically generated **Source code** archives contain repository files; choose the named setup ZIP for your client.
 
 These public packages contain no login credentials or pre-bound customer connection. Every customer signs in with their own CloudHandset account. The Dot ZIP is a setup kit: create your account connection, bind its technical ID, and generate the smaller archive to upload to ChatGPT Plugins.
 
@@ -24,7 +25,7 @@ These public packages contain no login credentials or pre-bound customer connect
 
 ```mermaid
 flowchart LR
-    A[Your Codex, Dot, or Muse] --> B[CloudHandset account verification]
+    A[Your Codex, Dot, Muse, or Grok Bot] --> B[CloudHandset account verification]
     B --> C[Phone covered by your active lease]
     C --> D[Observe and act through MCP]
     D --> E[Verify the screen and release control]
@@ -114,6 +115,10 @@ Start with the [Dot screen-check prompt](DOT_SETUP.md). The [complete Dot instal
 
 CloudHandset for **Meta Muse 0.1.2** uses Muse's Custom Connector and official credential helper. Download the ZIP, attach its six files (`README.md`, `SETUP.md`, `TOOLS.md`, `PARALLEL_CONTROL.md`, `cloudhandset.py`, `upload_file.py`) to a Muse conversation, and follow the [installation and upgrade guide](MUSE_INSTALL.md). Muse installs both scripts side by side; you complete your own CloudHandset login if needed. An existing valid connector can be retained when upgrading.
 
+## Set up Grok Bot
+
+Download **CloudHandset for Grok Bot 0.1.1** and follow [GROK_INSTALL.md](GROK_INSTALL.md). Extract the package, create or reuse your custom CloudHandset MCP connection, complete your own login, and save the phone instructions as a personal skill. Load `cloudhandset-phone` by name and start with a screen check on your selected phone. Uploads require the included Python helper on the Bot's computer. This GitHub release is not a Grok Bot marketplace listing or one-click ZIP installation.
+
 ## Parallel phone work
 
 Dot 0.2.4 and Muse 0.1.2 keep a separate session, observation, operation history, result, and release record for each Android phone. Different phones can progress in parallel; steps on the same phone remain ordered. Busy phones stay with their current operator. Give the agent the selected phone names and the task for each phone.
@@ -128,7 +133,7 @@ Service capacity was checked at 1, 4, 8, and 16 phones for 120 seconds per level
 
 ## Fast file upload
 
-All three versions include the same uploader. The agent reads your attached/local file, requests a file-specific upload through its authenticated connection, and sends one binary transfer. CloudHandset uses its original upload writer to deliver the file to the Android phone. The limit is 30 MiB. The agent checks final completion and releases control; it checks the intended media picker when your task needs it. See [the upload guide](DOT_UPLOAD.md).
+All four client packages include the same uploader. Grok Bot needs the helper installed on its cloud computer; follow its dedicated setup guide. The agent reads your attached/local file, requests a file-specific upload through its authenticated connection, and sends one binary transfer. CloudHandset uses its original upload writer to deliver the file to the Android phone. The limit is 30 MiB. The agent checks final completion and releases control; it checks the intended media picker when your task needs it. See [the upload guide](DOT_UPLOAD.md).
 
 A 4,694,656-byte Demo MP4 completed upload, checksum and media-index checks in the 2026-10-11 acceptance run: web 41.829 s, Codex 23.447 s, Dot connection exercised by Codex 24.128 s, and Muse's own host 25.567 s. This was one run on one Android phone, not a speed guarantee or a test of Dot autonomously publishing content.
 
@@ -144,7 +149,7 @@ Each phone has one active controller. When a person takes control back through C
 
 ### Is this a public plugin marketplace listing?
 
-This repository provides downloadable installation packages. Codex uses the included local plugin marketplace. Dot customers create their own MCP connection and upload their own bound skill archive. Muse uses a Custom Connector and execution adapter; it is not a Meta-approved directory listing. There is no one-click public marketplace installation in these releases.
+This repository provides downloadable installation packages. Codex uses the included local plugin marketplace. Dot customers create their own MCP connection and upload their own bound skill archive. Muse uses a Custom Connector and execution adapter; it is not a Meta-approved directory listing. Grok Bot uses a custom remote MCP connection and personal skill. There is no one-click public marketplace installation in these releases.
 
 ### Does installing the package connect a phone automatically?
 
@@ -181,6 +186,7 @@ Start with the installation guide for your client. For account, lease, connectio
 | Codex setup ZIP | Local plugin marketplace, MCP configuration, phone-operation skill, and installation guide. |
 | Dot setup ZIP | Connection-binding script, unbound Dot skill, installation and first-use guides, and the optional Codex dependency. |
 | Muse setup ZIP | Custom Connector setup prompts, tool reference, and credential-free Python MCP adapter. |
+| Grok Bot plugin ZIP | Native MCP configuration, personal-skill instructions, references, and shared Python uploader. |
 | [CODEX_INSTALL.md](CODEX_INSTALL.md) | Complete Codex setup and account-access guidance. |
 | [DOT_INSTALL.md](DOT_INSTALL.md) | Complete Dot OAuth, per-account binding, and archive-upload instructions. |
 | [DOT_SETUP.md](DOT_SETUP.md) | First-use prompts and control/recovery behavior. |

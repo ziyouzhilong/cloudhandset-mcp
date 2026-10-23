@@ -2,7 +2,7 @@
 
 For account, lease, connection, billing, or immediate authorization revocation assistance, contact CloudHandset through [the official website](https://www.cloudhandset.com).
 
-For installation, start with the [Codex guide](CODEX_INSTALL.md), [Dot guide](DOT_INSTALL.md), or [Muse guide](muse/README.md). Dot also has a [first phone check](DOT_SETUP.md); Muse has [setup prompts](muse/SETUP.md) and a [tool reference](muse/TOOLS.md).
+For installation, start with the [Codex guide](CODEX_INSTALL.md), [Dot guide](DOT_INSTALL.md), [Muse guide](muse/README.md), or [Grok Bot guide](GROK_INSTALL.md). Dot also has a [first phone check](DOT_SETUP.md); Muse has [setup prompts](muse/SETUP.md) and a [tool reference](muse/TOOLS.md).
 
 For Dot file uploads, install or upgrade to **0.2.4**, refresh the existing connection's MCP tools, and follow the [file-upload reference](DOT_UPLOAD.md). Confirm the original complete operation reached `succeeded` and retain its returned path. If a video is absent from a photo picker, reopen the picker after any media-index request; Files/Downloads is an alternative only when the app offers it. Do not repeat a verified transfer just because the picker has not refreshed. Contact website support if the file is still unavailable.
 
@@ -23,3 +23,5 @@ Ask the agent to release control and confirm that the session is closed and drai
 Removing a plugin or signing out locally does not necessarily revoke a server-side authorization. For immediate revocation, ask support to confirm that authorization has been revoked and control has drained.
 
 For Muse installation, follow the [five-step guide](MUSE_INSTALL.md). Attach all six extracted files to Muse chat, complete its official connection form, then let Muse install the dedicated skill.
+
+For Grok Bot, distinguish custom MCP authentication, personal-skill loading, file-helper availability, and phone execution. If the skill loader reports a missing file, follow the exact-path recovery in [SETUP.md](grok-bot/SETUP.md). Do not modify internal credential stores or recreate a working OAuth connection to fix a skill file.

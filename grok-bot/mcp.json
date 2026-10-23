@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "cloudhandset": {
+      "url": "https://device.cloudhandset.com/mcp",
+      "auth": {
+        "CLIENT_ID": "cloudhandset-grok-bot",
+        "scopes": ["device:control"]
+      }
+    }
+  }
+}

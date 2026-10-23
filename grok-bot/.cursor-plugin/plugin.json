@@ -1,0 +1,11 @@
+{
+  "name": "cloudhandset-grok-bot",
+  "version": "0.1.1",
+  "description": "Connect Grok Bot to your leased CloudHandset Android phones for screen inspection, phone tasks, and file uploads.",
+  "author": {
+    "name": "CloudHandset"
+  },
+  "homepage": "https://www.cloudhandset.com/mcp/",
+  "mcpServers": "./mcp.json",
+  "skills": ["./skills/cloudhandset-phone"]
+}

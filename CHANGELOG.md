@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-23 — Grok Bot 0.1.1
+
+- Add native CloudHandset MCP configuration, phone-operation instructions, and the shared Python uploader for Grok Bot.
+- Provide a dedicated OAuth client and chat-based custom MCP plus personal-skill setup. Each customer completes their own CloudHandset login.
+- Document loading the skill by name and supplying its backing files when the host reports a missing file.
+- Publish the credential-free ZIP and checksum on GitHub; this does not create a Grok Bot marketplace listing. Keep the existing Codex, Dot, and Muse releases unchanged.
+
 ## 2026-10-18 — Dot 0.2.4 and Muse 0.1.2
 
 - Add independent cross-phone workflows with ordered steps per phone, separate images/results, bounded dispatch, and independent cleanup after partial failures. Account-wide simultaneous control is limited to 16 phones across all clients and credentials.
