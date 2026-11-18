@@ -1,10 +1,14 @@
 # CloudHandset MCP tool reference
 
-Setup kit **0.1.2** · Tool reference originally checked **2026-10-10** against `server/mcpToolSchemas.ts` and `server/mcpServer.ts`, with execution semantics from `agentControlService.ts` and the device services. Parallel workflow added **2026-10-18**; discover the deployed schemas before use.
+Setup kit **0.1.4** · Tool reference originally checked **2026-10-10** against `server/mcpToolSchemas.ts` and `server/mcpServer.ts`, with execution semantics from `agentControlService.ts` and the device services. Parallel workflow added **2026-10-18**; discover the deployed schemas before use.
 
 These are the server's 12 tools. Muse must discover their live schemas after compatible authentication; this reference does not establish that Muse can call them. The only OAuth scope is `device:control`. There is no read-only scope. Only `list_devices` and `observe` carry the server's top-level read-only hint; treat every other tool, including the mixed-purpose `device_tool`, as potentially consequential and keep host approvals enabled.
 
 Source update (2026-10-11): account connections dynamically list eligible current leases, including newly added phones. Legacy credentials retain single-phone scope. Discover the deployed schema before calling tools.
+
+## Shared task workflow
+
+Read [phone-workflow.md](phone-workflow.md) for completion conditions, app-guide selection, report evidence and optional semantic observation. Request `include_ui: true` only when the live schema and session capability support it; the adapter forwards arguments unchanged. Inspect the native image even when UI elements are available. Apply app guides to the current authorized task; verify the actual app and visible result.
 
 ## Common inputs and results
 
@@ -22,7 +26,7 @@ Source update (2026-10-11): account connections dynamically list eligible curren
 | --- | --- | --- |
 | `list_devices` | `{}` | Reads the phone authorized by this credential: `devices` with IDs, display/model details, lease/grant expiry, `automation_enabled`, `supported`, and `busy`. Does not acquire control. |
 | `acquire_control` | `device_id`, `operation_id` | Reserves exclusive control. Check `acquired: true` and `state: "active"`; retain `session_id`, `control_epoch`, expiry, and capabilities. Busy writers are never evicted. |
-| `observe` | S; optional `after_operation_id` | Captures a fresh image with `observation_id`, capture/expiry times, image/control dimensions, and orientation. `after_operation_id` attaches the receipt for an existing operation in this session; it is not a guarantee that its business outcome succeeded. |
+| `observe` | S; optional `after_operation_id`; `include_ui` only if advertised by the live schema/session | Captures a fresh image with `observation_id`, capture/expiry times, image/control dimensions, and orientation. `after_operation_id` attaches the receipt for an existing operation in this session; it is not a guarantee that its business outcome succeeded. |
 | `tap` | O + `x`, `y` | One screen tap; operation receipt. |
 | `swipe` | O + `start_x`, `start_y`, `end_x`, `end_y`, `duration_ms` (integer 50–5000) | Screen swipe; operation receipt. |
 | `input_text` | O + nonempty `text` (at most 4096 UTF-8 bytes) | Types into the focused field using the clipboard path. Does not clear or submit the field; operation receipt. |
@@ -121,6 +125,8 @@ Current defaults are **180 ordinary tool calls/minute per credential**, with a s
 Requests are capped at 64 KiB. Screenshots have a maximum edge of 1280 pixels and a decoded size limit of 2 MiB. An idle session is normally released after five minutes; explicit cleanup is still required when a task ends.
 
 ## Fast upload (0.1.1)
+
+Validate the supplied file before acquiring the selected phone's exclusive `session_id`; a file-only preflight needs no phone control. In the host execution environment, run `python3 bin/upload_file.py inspect /absolute/path/to/file` using the actual attachment/local file and the existing executable directory. The result contains `name`, `size`, and `sha256`; no file bytes enter the model context. If the user supplied an expected size or digest, require an exact match before uploading. Do not manually retype, guess, or repair a long encoded payload. If exact bytes are unavailable or a check fails, stop before acquiring control, report the input problem, and request the original attachment; do not search unrelated files, chat transcripts, histories, or account data to reconstruct it.
 
 Install `upload_file.py` next to `cloudhandset.py`. From the existing private skill, run:
 

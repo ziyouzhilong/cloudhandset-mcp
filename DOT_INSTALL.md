@@ -1,12 +1,18 @@
 # CloudHandset for OpenAI Dot
 
-Version 0.2.4. Connect Dot to the Android phones covered by your CloudHandset leases, then install the phone-operation skill. Each customer connects their own account. The public download contains no account connection or login credentials.
+> Release **plugins-2026.11.17**. See [release status and validation limits](RELEASE_STATUS.md).
 
-Version 0.2.4 adds independent multi-phone workflows, shared-budget scheduling, and per-phone outcomes and cleanup. An account can control at most 16 phones at once across all clients. Keep the existing [fast uploader](DOT_UPLOAD.md), with one binary transfer and a 30 MiB limit. Refresh stale tool schemas and read the [parallel-control reference](PARALLEL_CONTROL.md) before a multi-phone task.
+> Includes the [shared task workflow](dot/plugin/skills/android-phone/references/phone-workflow.md) and three app guides for observing, acting and checking the result. A tool receipt alone does not establish task completion.
+
+Version 0.2.6. Connect Dot to the Android phones covered by your CloudHandset leases, then install the phone-operation skill. Each customer connects their own account. The public download contains no account connection or login credentials.
+
+The earlier 0.2.4 release added [parallel phone control](dot/plugin/skills/android-phone/references/parallel-control.md): independent device/session records, one ordered sequence per phone, paced dispatch, and per-phone recovery and release. True simultaneous calls require the host's parallel tool facility; a sequential host interleaves the phone sequences and reports that limitation. On 2026-10-18, the existing cloud plugin was updated to 0.2.4 and its authenticated Dot connection was exercised from Codex with two phones: concurrent sessions, individual screenshots, Settings/Home actions, and confirmed closed/drained release. This was not an autonomous Dot conversation or native 16-phone Dot run. The packaged uploader and [fast file upload](dot/plugin/skills/android-phone/references/fast-upload.md) remain available.
+
+Each account can control at most 16 Android phones simultaneously across Dot, Muse, Codex, and all credentials. Dot checks the selected batch before dispatch and rejects more than 16 targets without silently starting a subset or splitting the task. The service enforces the shared account limit; changing a connection cannot bypass it. Release your own finished sessions and confirm they are closed before acquiring another phone.
 
 ## Upgrade from an earlier version
 
-Keep your existing working CloudHandset connection. On its management page, refresh its MCP tools so `device_tool` exposes the upload arguments. Download and extract the 0.2.4 setup kit, then follow steps 2 and 3 below using the **same connection's technical app ID**. On your existing CloudHandset plugin page, choose **More → Upload new version** and upload the newly generated `cloudhandset-dot-connected.zip`. Confirm version **0.2.4**, one connected CloudHandset app, and one android-phone skill. Reconnect only if your account authorization has expired; updating the skill does not require creating another connection.
+Keep your existing working CloudHandset connection. Download and extract the 0.2.6 setup kit, then follow steps 2 and 3 below using the **same connection's technical app ID**. Choose **More → Upload new version** on the existing plugin page and upload the newly generated `cloudhandset-dot-connected.zip`. Confirm version **0.2.6**, one connected CloudHandset app, and one android-phone skill. Updating the skill does not create another connection or broaden a legacy single-phone authorization; use the normal account-scope consent flow if additional phones are needed.
 
 If Dot still reports missing upload parameters, refresh/rediscover that existing connection's tools and start a new task with the updated skill. Use the fast-upload reference for the one-transfer workflow, completion checks, and media-picker verification. Do not silently fall back to hundreds of per-chunk tool calls.
 
@@ -36,11 +42,11 @@ Open [ChatGPT Plugins](https://chatgpt.com/plugins), choose **Add → Create cus
 
 The displayed callback must match this value exactly. If it differs or the required settings are unavailable, contact CloudHandset support; do not substitute a callback or invent a client secret. The client ID is a public application identifier, not a password.
 
-Create the connection and complete **Verify and connect** in the independent CloudHandset login window. Use your own account there; never paste passwords, verification codes, tokens, or complete OAuth callback URLs into a chat. Authorization lasts at most 30 days, and each phone requires a valid effective lease. Choose **Current and future Android phone leases** to include eligible phones added during this fixed authorization, or **Only one selected Android phone** for access to one phone. Existing single-phone connections do not expand automatically: reconnect once to opt in, then refresh the tools and call `list_devices` again. Each phone still requires an effective lease; account scope does not clear an explicit automation stop. When it expires, reconnect through the login window.
+Create the connection and complete **Verify and connect** in the independent CloudHandset login window. Use your own account there; never paste passwords, verification codes, tokens, or complete OAuth callback URLs into a chat. Authorization lasts at most 30 days, and each phone requires a valid effective lease. Choose **Current and future Android phone leases** to include eligible phones added during this fixed authorization, or **Only one selected Android phone** for access to one phone. Existing single-phone connections do not expand automatically: reconnect once to opt in, then refresh the tools and call `list_devices` again. Each phone still requires an effective lease; account scope does not resume a manually paused phone. When it expires, reconnect through the login window.
 
 ## 2. Bind your copy of the skill
 
-Extract `cloudhandset-dot-setup-0.2.4.zip`. In the extracted `cloudhandset-dot/` folder, find `bind-connection.py` and `plugin/`.
+Extract `cloudhandset-dot-setup-0.2.6.zip`. In the extracted `cloudhandset-dot/` folder, find `bind-connection.py` and `plugin/`.
 
 Open the newly created CloudHandset connection's management page and copy its technical app ID. It must have the form `asdk_app_…` or `plugin_asdk_app_…`. Use the real ID from your connection, not the display name or a hosted plugin's `Plugin_…` ID.
 
@@ -75,7 +81,7 @@ If custom MCP creation or archive upload is unavailable for your account, this c
 
 ## Optional: local Codex fallback
 
-The setup kit includes CloudHandset for Codex 0.1.3 under `local-codex/`. Keep an existing working installation. Otherwise follow `local-codex/README.md` to install it and log in on your computer.
+The setup kit includes the CloudHandset for Codex 0.1.5 under `local-codex/`. Keep an existing working installation. Otherwise follow `local-codex/README.md` to install it and log in on your computer.
 
 To use that route, allow your Dot access to the computer from its **Computers** settings, keep the computer online with the desktop app open, and explicitly ask Dot to create a local Codex task using the installed `cloudhandset:cloudhandset-phone` skill. Connecting the computer to Codex is separate from allowing Dot access. The local executor inspects phone images; Dot should report that distinction. This route uses the existing local connection and must not copy cloud credentials or add a duplicate MCP server.
 

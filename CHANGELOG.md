@@ -1,5 +1,13 @@
 # Changelog
 
+## plugins-2026.11.17
+
+- Release Codex 0.1.5, Dot 0.2.6, Muse 0.1.4 and Grok Bot 0.1.3 with the shared task workflow, complete app guides and strict original-file upload preflight.
+- Keep existing customer connections, private bindings, approved scope and explicitly stopped tasks when upgrading.
+- Limit Muse installation to its confirmed CloudHandset connector/skill directories; prohibit global MEMORY.md, unrelated history, other skills, schedules and credential-store edits. This new wording has not received a new native installation acceptance run.
+- Preserve historical failures and distinguish package integrity from host loading, model-image provenance and business acceptance. Dot's attachment byte-source mismatch remains unresolved; stop before control when integrity cannot be verified.
+- Publish the five versioned assets and checksums on GitHub; this does not establish a marketplace listing or new native installation acceptance. See [release status](RELEASE_STATUS.md).
+
 ## 2026-10-23 — Grok Bot 0.1.1
 
 - Add native CloudHandset MCP configuration, phone-operation instructions, and the shared Python uploader for Grok Bot.

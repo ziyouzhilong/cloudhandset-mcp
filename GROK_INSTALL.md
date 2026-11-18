@@ -1,25 +1,23 @@
 # Install CloudHandset for Grok Bot
 
-Use this guide for xAI **Grok Bot**, not ordinary Grok chat or the xAI model API.
+> Release **plugins-2026.11.17**. See [release status and validation limits](RELEASE_STATUS.md).
 
-1. Download [CloudHandset for Grok Bot 0.1.1](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.23/cloudhandset-grok-bot-plugin-0.1.1.zip), verify [SHA256SUMS](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.10.23/SHA256SUMS), and extract it.
-2. Follow the connector prompt in [SETUP.md](grok-bot/SETUP.md). Reuse a working CloudHandset connection. The endpoint is `https://device.cloudhandset.com/mcp`, public client ID `cloudhandset-grok-bot`, scope `device:control`, and client secret is empty.
-3. Click the Connect card returned by Grok Bot. Complete your own login in the separate CloudHandset window and choose account or single-phone scope. Do not send your password, verification code, or callback URL to chat.
-4. Supply the skill and its reference text from the extracted package as described in SETUP.md. Save one self-contained personal skill named `cloudhandset-phone`, then ask Grok Bot to load it by name. If the loader reports a missing backing file, follow the exact-path repair in the guide. For uploads, also supply `scripts/upload_file.py` from the skill folder and verify its checksum before using it.
-5. Ask Grok Bot to list your phones. Select one available Android phone, view its current screenshot, and release control before starting a larger task.
+Use this guide for Grok Bot, not ordinary Grok chat or a model API. Version **0.1.3** is a custom MCP plus personal-skill setup kit, not a catalog entry.
 
-First screen-check prompt:
+1. Obtain the [Grok Bot ZIP](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.11.17/cloudhandset-grok-bot-plugin-0.1.3.zip), verify [SHA256SUMS](SHA256SUMS), and extract it.
+2. Follow [SETUP.md](grok-bot/SETUP.md). Reuse the existing working CloudHandset connector and skill ID. The public client ID is `cloudhandset-grok-bot`; client secret is empty. Complete any necessary authorization in the separate CloudHandset window.
+3. Update only that skill's files. Supply its SKILL.md, all references including phone-workflow.md and three app guides, and scripts/upload_file.py. Preserve relative directories, or inline all referenced Markdown sections only when the host requires it. Do not leave broken reference links.
+4. Load the existing skill by name and verify saved contents. If the host reports a missing backing file, use only its reported path and supported recovery flow. Do not recreate a working connector or modify credential stores.
+5. Report installed paths and version before phone use. Keep explicitly stopped tasks stopped. A screen check needs the user's selected phone and separate authorization.
 
 ```text
-Load cloudhandset-phone by name and use my authenticated CloudHandset connector.
-List my Android phones and let me choose one if I have not selected one yet.
-On that available phone, acquire control, inspect the actual screenshot,
-describe what you see, then release control and confirm closed and drained.
-Do not tap, type, upload, install, share, change networking, or restart the phone.
+Load cloudhandset-phone by name and use my existing authenticated connection.
+List my Android phones and let me select one if needed. On that available phone,
+acquire control, inspect the actual screenshot, describe it and release control.
+Confirm closed and drained. Do not tap, type, upload, install, share, change
+networking or restart the phone. Report missing prerequisites and unresolved results.
 ```
 
-The supported setup is **custom MCP plus a personal skill**. The ZIP is a source and setup package, not a direct Grok Bot catalog import; this GitHub release is not a marketplace listing. Use the skill by name. The private-skill menu and persistence after a host restart are not verified. See [compatibility and supported validation scope](grok-bot/README.md) before relying on a particular workflow.
+Preserve valid OAuth and approved account/single-phone scope during upgrades. A new package does not widen permissions. Keep host approvals enabled and account-bound files private. Uploads require the real file and the packaged helper; verify size/SHA before acquiring control. No retries of unknown transfers are permitted.
 
-Uploads require Python 3.9+ and the included helper on the Bot's computer. The helper performs one binary transfer, and the agent must check the original completion operation and release control. A completed upload does not establish visibility in a media picker or publication in an app.
-
-Existing Codex, Dot, and Muse installations need no changes. Keep valid connections and account-bound skills private.
+Personal-skill persistence after a host restart and catalog installation are not certified. See [package details](grok-bot/README.md), [release limits](RELEASE_STATUS.md) and [Support](SUPPORT.md).

@@ -1,0 +1,7 @@
+# Merge these sections into your existing Codex configuration; do not replace the file.
+# Sign in with your own CloudHandset account using codex mcp login cloudhandset.
+[mcp_servers.cloudhandset]
+url = "https://device.cloudhandset.com/mcp"
+
+[mcp_servers.cloudhandset.oauth]
+client_id = "cloudhandset-codex"

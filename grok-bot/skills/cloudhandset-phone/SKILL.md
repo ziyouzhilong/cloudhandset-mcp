@@ -7,6 +7,10 @@ Use Grok Bot's authenticated CloudHandset MCP connection and discovered native t
 
 The separate Grok OAuth client is registered. Private custom-MCP and personal-skill acceptance has verified single-phone images, basic actions, a small text upload and release; this is not catalog-plugin installation. Each new connection still requires the user's own login. If tools or authentication are missing, report the gap and use Grok's available connection/login flow. Never request passwords, OTPs, tokens, cookies, or complete callback URLs in chat. Keep host tool approvals enabled.
 
+## Shared task workflow
+
+Read [phone-workflow.md](references/phone-workflow.md) for completion conditions, optional `include_ui` capability checks, app-guide selection, uncertainty and report evidence. Load only the relevant linked app guide. Apply the guides to the current authorized task and visible app; existing connection instructions below remain in force.
+
 ## Select the requested phone
 
 Call `list_devices` afresh for each task and after adding a phone. Match the requested name to a returned `device_id`; never hardcode test phones or IDs. Ask if the target is ambiguous. An empty list does not authorize another account. Do not evict a busy phone's operator.

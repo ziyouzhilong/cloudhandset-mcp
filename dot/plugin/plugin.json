@@ -1,0 +1,22 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "cloudhandset-dot",
+  "version": "0.2.6",
+  "description": "Route Dot phone tasks through an authenticated CloudHandset connection or an authorized local Codex task.",
+  "author": { "name": "CloudHandset", "url": "https://www.cloudhandset.com" },
+  "homepage": "https://www.cloudhandset.com",
+  "keywords": ["android", "mcp"],
+  "extensions": {
+    "com.openai": {
+      "apps": "./.app.json",
+      "interface": {
+        "displayName": "CloudHandset for Dot",
+        "shortDescription": "Operate your Android phones with Dot",
+        "developerName": "CloudHandset",
+        "category": "Productivity",
+        "capabilities": ["Read", "Write"],
+        "defaultPrompt": ["Use CloudHandset to list my Android phones. If direct tools are unavailable, create a local Codex task on my connected computer using the installed CloudHandset plugin."]
+      }
+    }
+  }
+}

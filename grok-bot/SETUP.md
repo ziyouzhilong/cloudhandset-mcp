@@ -1,10 +1,10 @@
 # Set up CloudHandset in Grok Bot
 
-Version 0.1.1: the dedicated CloudHandset OAuth client is registered and its real Grok Bot OAuth flow has been verified. Private acceptance in Grok Bot 0.75.3 passed one selected phone's screen observation, basic navigation/tap/text-input actions, a small plain-text upload, and closed/drained release. Multiple-phone operation, media-picker visibility, large files, failure recovery, connectivity changes, restart, and sharing remain untested in Grok Bot. Use the existing Grok Bot connector if one is already working; do not duplicate it or replace its private binding. No CloudHandset password, token, cookie, or authorization code belongs in chat or these files.
+Historical 0.1.1 checks: the dedicated CloudHandset OAuth client is registered and its real Grok Bot OAuth flow has been verified. Private acceptance in Grok Bot 0.75.3 passed one selected phone's screen observation, basic navigation/tap/text-input actions, a small plain-text upload, and closed/drained release. Multiple-phone operation, media-picker visibility, large files, failure recovery, connectivity changes, restart, and sharing remain untested in Grok Bot. Use the existing Grok Bot connector if one is already working; do not duplicate it or replace its private binding. No CloudHandset password, token, cookie, or authorization code belongs in chat or these files.
 
 ## 1. Prepare the connector
 
-Use a custom MCP connection plus a personal skill for private acceptance. The ZIP is a distribution and review candidate, not a Grok Bot installer. In the inspected host, `InstallPlugin` requires a stable catalog plugin ID and does not accept an attachment, ZIP, or local path. This candidate has no catalog ID. Copy this prompt directly into a Bot chat:
+Use a custom MCP connection plus a personal skill for private acceptance. The 0.1.3 ZIP contains setup files and a personal skill; it is not a Grok Bot catalog installer. In the inspected host, `InstallPlugin` requires a stable catalog plugin ID and does not accept an attachment, ZIP, or local path. This package has no catalog ID. Copy this prompt directly into a Bot chat:
 
 ```text
 Prepare CloudHandset as a custom remote MCP connector in this Grok Bot account.
@@ -31,7 +31,14 @@ CloudHandset's applied registration uses the cloud callback verified in the real
 
 Ask Grok Bot to show its Connect/Authenticate card. Complete CloudHandset verification in the independent browser window. Choose the intended account or single-phone scope. This does not authorize work on all listed phones. A missing card can be reopened with the host's supported reconnect flow. If the provider reports an invalid client or callback, stop and check the registration; avoid repeated login attempts.
 
-Extract the candidate ZIP outside the catalog-install flow. Provide the text from `skills/cloudhandset-phone/SKILL.md`, with the contents of its `references/tools.md`, `references/parallel-control.md`, and `references/file-upload.md` inlined as named sections. Ask Grok Bot to save one self-contained personal skill with the same instructions and safety boundaries, replacing relative reference links with those section names. Saving only the main text with unresolved file links is incomplete. Supply the unchanged `scripts/upload_file.py` from the extracted skill as a separate chat attachment if uploads are needed.
+Extract the ZIP outside the catalog-install flow. Update the existing `cloudhandset-phone` personal skill with the unchanged `skills/cloudhandset-phone/SKILL.md` body. Supply its complete supporting directory with these files:
+
+- `references/phone-workflow.md`
+- `references/app-guides/android-settings.md`, `chrome-qa.md`, and `gallery.md`
+- `references/tools.md`, `parallel-control.md`, and `file-upload.md`
+- `scripts/upload_file.py`
+
+Preserve relative paths beneath the skill directory returned by the host. Do not paste only the main skill and leave references unresolved. Keep the existing skill ID and connector binding. If the host only supports a self-contained skill, inline every referenced Markdown document as a named section and replace its local links consistently; keep the unchanged Python helper as a separate file. Verify the complete saved content against the package before using it.
 
 Ask the Bot to load `cloudhandset-phone` by name with its `Skill` tool. In the inspected host, `UpdateSkill` saved the catalog entry but left the backing `SKILL.md` absent; updating the same entry again did not create it. If the loader reports that exact missing-file condition, use the host's supported file/execution tools to write the self-contained skill at the path explicitly reported by the loader. Preserve the existing skill ID. Do not guess a Mac, Cursor IDE, or cloud installation path, and do not delete/recreate the skill merely to repair the missing file.
 
@@ -39,7 +46,7 @@ For uploads, copy the attached helper to `scripts/upload_file.py` beneath that a
 
 Load the skill again and read back the instructions, inlined reference sections, and helper path. After the missing files were supplied, two loads in the same turn and another load in a later turn succeeded without saving or repairing them again. This verifies loading across turns, not persistence after restart. Private-skills settings and `/` selection have not been verified as usable; invoke the skill by name. Attach the connected CloudHandset app with `@` when needed. The first screen check below does not need the uploader.
 
-A custom MCP plus this equivalent personal skill is the private acceptance path, not a catalog plugin installation. A future catalog installation requires a published entry and its stable plugin ID; do not infer that a team repository import, a local ZIP, or Cursor IDE loading installs the plugin into Grok Bot. The team must permit the endpoint. This candidate has not been published.
+A custom MCP plus this equivalent personal skill is the private acceptance path, not a catalog plugin installation. A future catalog installation requires a published entry and its stable plugin ID; do not infer that a team repository import, a local ZIP, or Cursor IDE loading installs the plugin into Grok Bot. The team must permit the endpoint. A public ZIP release does not create a Grok Bot catalog entry.
 
 ## 3. First connection check
 

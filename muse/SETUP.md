@@ -1,12 +1,20 @@
-## Upgrade to 0.1.2
+## CloudHandset for Muse 0.1.4
 
-Keep the existing Custom Connector and its private skill binding. This version includes the four approved compatibility, argument, coordinate, and upload-completion repairs. Before replacing a working adapter, verify the official credential-helper interface described below. See [README.md](README.md#validation-scope--2026-10-18) for the two-phone Muse-host results and the remaining limits.
+This setup kit adds the shared task workflow and app guides. Use it with your authorized CloudHandset phone tasks. Keep the existing Custom Connector and its private skill binding. The unchanged adapter retains the earlier 0.1.2 compatibility, argument, coordinate, and upload-completion repairs. Before replacing a working adapter, verify the official credential-helper interface described below. See [README.md](README.md#validation-scope--2026-10-18) for the two-phone Muse-host results and the remaining limits.
 
-After compatibility is established, back up the working adapter, install `cloudhandset.py` and `upload_file.py` together, and update `TOOLS.md` plus `PARALLEL_CONTROL.md`. Make the existing private skill read the parallel-control reference for multiple-phone requests. This six-file kit does not require a new OAuth connection when the existing account scope already covers the selected phones. Legacy single-phone grants need the normal account-scope consent flow before another phone can be listed.
+After compatibility is established, back up the working adapter, install `cloudhandset.py` and `upload_file.py` together, and update `TOOLS.md`, `PARALLEL_CONTROL.md`, `phone-workflow.md` and `app-guides/`. Make the existing private skill read the parallel-control reference for multiple-phone requests. This kit does not require a new OAuth connection when the existing account scope already covers the selected phones. Legacy single-phone grants need the normal account-scope consent flow before another phone can be listed.
 
 The account-wide control limit is 16 Android phones, including sessions held by other clients or credentials. Use `--workers` from 1 to 16 and no more than 16 distinct phones across a batch's requests and known sessions. Oversized batches are rejected before dispatch. Do not create another connector to bypass the limit; wait for confirmed release before explicitly acquiring another phone.
 
 Follow the command format in [TOOLS.md](TOOLS.md). Use explicit concurrency and a combined call budget for the connection; the batch command does not automatically acquire, operate, or release any phone. Begin live acceptance only on explicitly designated available phones, with list, acquire, observe, read images, and release.
+
+## Installation scope
+
+Before changing files, identify the actual CloudHandset connector and skill directories and report the intended paths. Install or update only this connector's CloudHandset files and a backup within its confirmed directory; for a new connection, use the dedicated directory returned by the host's normal setup flow. Do not guess a global path.
+
+Do not read or edit global MEMORY.md, daily logs, unrelated chat/history files, other skills, global agent instructions, scheduled tasks, or internal credential stores as part of installation. Use the official credential helper without inspecting or copying credentials. If host instructions require changes outside the confirmed connector/skill directories, stop and report the conflict before changing files.
+
+Preserve the existing connector, private binding, valid OAuth authorization and approved phone scope. Keep explicitly stopped tasks stopped; installation does not resume automation or authorize phone control. Report installed paths, package and adapter versions, and local import/compile/help checks. A phone screen check is a separate user-authorized step.
 
 # Set up CloudHandset in Meta Muse
 
@@ -70,9 +78,9 @@ If Muse already confirms the provider is connected, continue to scaffold and too
 
 ### Install the execution skill after connection
 
-Give Muse this kit's six public files. For a new connected provider, use the official setup/scaffold procedure documented by the current Muse runtime. The October 10 check used `/opt/hatch/skills/skill-creator/bin/scaffold-connector-skill --provider cloudhandset`; verify the current official command before using it. An existing working connector does not need to be scaffolded again. Use the actual credential name and helper contract from its Tooling/Auth section; never substitute an account identifier from another installation. Keep that generated, account-bound skill private.
+Give Muse this kit's public files and app-guides directory. For a new connected provider, use the official setup/scaffold procedure documented by the current Muse runtime. The October 10 check used `/opt/hatch/skills/skill-creator/bin/scaffold-connector-skill --provider cloudhandset`; verify the current official command before using it. An existing working connector does not need to be scaffolded again. Use the actual credential name and helper contract from its Tooling/Auth section; never substitute an account identifier from another installation. Keep that generated, account-bound skill private.
 
-Place `cloudhandset.py` and `upload_file.py` together in the skill's existing executable directory (for example `scripts/` or `bin/`), and make the skill follow the workflow below, `TOOLS.md`, and `PARALLEL_CONTROL.md`. The script uses Python 3.9+ and the installed official helper. It sends credentials only through `add_surrogate_to_request` to `device.cloudhandset.com`; it does not accept tokens or another endpoint and never retries uncertain writes.
+Place `cloudhandset.py` and `upload_file.py` together in the skill's existing executable directory (for example `scripts/` or `bin/`), and make the skill follow the workflow below, `TOOLS.md`, `PARALLEL_CONTROL.md`, and `phone-workflow.md` (preserving its `app-guides/` directory). The script uses Python 3.9+ and the installed official helper. It sends credentials only through `add_surrogate_to_request` to `device.cloudhandset.com`; it does not accept tokens or another endpoint and never retries uncertain writes.
 
 ### Official helper compatibility
 

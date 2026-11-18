@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "cloudhandset": {
+      "type": "http",
+      "url": "https://device.cloudhandset.com/mcp",
+      "oauth": { "client_id": "cloudhandset-codex" }
+    }
+  }
+}

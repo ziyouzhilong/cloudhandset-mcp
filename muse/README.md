@@ -1,8 +1,10 @@
 # CloudHandset for Meta Muse
 
-Setup kit **0.1.2** · Updated **2026-10-18**
+> Includes the [shared task workflow](phone-workflow.md) and three app guides for observing, acting and checking the result. A tool receipt alone does not establish task completion.
 
-This version adds [independent multi-phone control](PARALLEL_CONTROL.md) and a paced `parallel` adapter command. Each account may control up to 16 Android phones at once across every client and credential. Workers must be 1–16; a batch covering more than 16 distinct phones is rejected before dispatch, with no automatic splitting. The 16-phone limit is backed by separate service capacity checks; the Muse-host run below used two phones.
+Setup kit **0.1.4** · Updated **2026-11-16**
+
+The earlier 0.1.2 release added [independent multi-phone control](PARALLEL_CONTROL.md) and a paced `parallel` adapter command. Each account may control up to 16 Android phones at once across every client and credential. Workers must be 1–16; a batch covering more than 16 distinct phones is rejected before dispatch, with no automatic splitting. The 16-phone limit is backed by separate service capacity checks; the Muse-host run below used two phones.
 
 Use this kit to prepare a Custom Connector for **Meta Muse, the personal agent**. It contains connection instructions, a Python MCP adapter, and a tool reference. It is not a Muse Code configuration, a native importable plugin, or a Meta-approved directory listing.
 
@@ -18,7 +20,7 @@ Some navigation-bar taps on the other phone were accepted but produced no visibl
 
 ## Install through Muse chat
 
-Follow the bundled [installation guide](SETUP.md): extract the ZIP and attach its six files to Muse. For a new connection, complete the official form with client ID `cloudhandset-muse` and an empty client secret. Reuse an existing ready connection and keep its private binding.
+Follow the bundled [installation guide](SETUP.md): extract the ZIP and attach the files and app-guides directory to Muse. For a new connection, complete the official form with client ID `cloudhandset-muse` and an empty client secret. Reuse an existing ready connection and keep its private binding.
 
 Before replacing an existing adapter, verify the official helper import in the current Muse runtime and keep a backup of the working adapter. The current official helper path was checked in Muse on 2026-10-18: `/opt/muse/skills/custom-connector-setup/bin/dynamic_credentials.py`. The adapter uses that path first and falls back to the previous official path only when the current file is absent. Missing, unloadable, or incompatible helpers and unavailable credentials return distinct errors before dispatch. Keep the existing private connector binding, place `upload_file.py` beside `cloudhandset.py`, and add `PARALLEL_CONTROL.md` to the skill's instructions. See [SETUP.md](SETUP.md) for migration checks and [TOOLS.md](TOOLS.md) for exact arguments, explicit coordinate conversion, and parallel calls.
 
@@ -74,15 +76,9 @@ For support, provide the Muse version, timestamp and timezone, connection stage,
 
 ## Package contents
 
-`cloudhandset-muse-setup-0.1.2.zip` contains only `README.md`, `SETUP.md`, `TOOLS.md`, `PARALLEL_CONTROL.md`, `cloudhandset.py`, and `upload_file.py` under `cloudhandset-muse/`. It includes no credentials or guessed import manifest. The Python script runs inside Muse's execution environment with its official credential helper; see the installation steps in [SETUP.md](SETUP.md).
+`cloudhandset-muse-setup-0.1.4.zip` contains `README.md`, `SETUP.md`, `TOOLS.md`, `PARALLEL_CONTROL.md`, `phone-workflow.md`, `cloudhandset.py`, `upload_file.py`, and three Markdown guides under `app-guides/`, all inside `cloudhandset-muse/`. It includes no credentials or guessed import manifest. The Python script runs inside Muse's execution environment with its official credential helper; see the installation steps in [SETUP.md](SETUP.md).
 
-Maintainers build it from the development repository root with:
-
-```sh
-python3 scripts/packageMuseConnector.py
-```
-
-The independent package command produces the six-file setup ZIP, `manifest.json`, and `SHA256SUMS`. Validation results above apply to their stated versions, hosts, phone counts, and workflows.
+Use the named setup ZIP from the public release and its `SHA256SUMS`. Historical validation results above apply only to their stated versions, hosts, phone counts and workflows.
 
 ## Official references
 

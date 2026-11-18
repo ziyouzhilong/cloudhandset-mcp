@@ -1,0 +1,7 @@
+interface:
+  display_name: "CloudHandset Android Phone"
+  short_description: "Connect to and operate your leased Android phone"
+  default_prompt: "Use $cloudhandset-phone to list my Android phones, let me choose one if needed, inspect its screen, and release control."
+
+policy:
+  allow_implicit_invocation: true

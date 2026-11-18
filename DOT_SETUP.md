@@ -6,7 +6,7 @@ When the CloudHandset verification page offers **Current and future Android phon
 
 Call `list_devices` again after adding a phone and at the start of each task. Select the returned `device_id`; never reuse a different phone's session. For `device_tool` actions named `share.*`, supply that `device_id` explicitly. A valid account connection can return an empty list when it has no eligible leases.
 
-Complete the connection and skill installation in [DOT_INSTALL.md](DOT_INSTALL.md) first. The installed plugin should show one connected CloudHandset app and one android-phone skill.
+Complete the connection and skill installation in [README.md](DOT_INSTALL.md) first. The installed plugin should show one connected CloudHandset app and one android-phone skill.
 
 Send this to Dot:
 
@@ -14,13 +14,13 @@ Send this to Dot:
 
 You may include the phone's displayed name in the request. Dot should match it against the current device list. A successful check means Dot inspected the real image and confirmed release. For later tasks, specify the action you want and when Dot should stop.
 
-## Check two or more phones
+## Multiple-phone screen check
 
-Use an account-scope connection and replace the names with phones shown by a fresh device list:
+After the account connection covers the selected phones, use a request such as:
 
-> Use my existing CloudHandset connection to check [PHONE A] and [PHONE B]. Keep one independent sequence per phone. Use your native parallel tool facility for different phones if available, with ordered steps on each phone; otherwise report that you are interleaving calls. Acquire only these available phones, read each current screen image, and report what you see for each. Do not tap, type, scroll, or press keys. Release each acquired session and confirm it is closed and drained. Keep separate results and unresolved cleanup if one phone fails. Do not take over a busy phone or start another agent.
+> Use CloudHandset to check the screens of PHONE A and PHONE B. Match their names against a fresh device list and skip any phone that is in use. Keep a separate session and result for each phone. If your host supports parallel tool calls, acquire and observe the phones concurrently within the service's call budget; otherwise interleave the steps and say so. Read both actual images, then release each session and verify closed and drained evidence independently. Do not tap, type, upload, install, restart, or take over a busy phone. If one phone fails, retain its error and any operation ID while still reporting and cleaning up the other phone.
 
-There is an account-wide limit of 16 simultaneously controlled phones, including other clients' sessions. Reject an oversized requested set before dispatch instead of silently splitting it. Reuse valid OAuth; reconnect only for expired access or explicit account-scope opt-in. Follow [PARALLEL_CONTROL.md](PARALLEL_CONTROL.md) for pacing and recovery.
+Replace the names with the phones you intend to check. For subsequent work, state the task for each phone and its stopping condition. The skill follows [parallel control](dot/plugin/skills/android-phone/references/parallel-control.md). Each account is limited to 16 simultaneously controlled phones across all tasks, clients, and credentials; use at most 16 targets and workers. An oversized batch is rejected before dispatch, without automatic splitting. On `account_device_limit_reached`, stop acquiring, report the limit, and wait for confirmed release of your own sessions before an explicit next acquisition. Do not change credentials or release another task's session to gain capacity.
 
 ## Control and recovery
 
@@ -28,7 +28,7 @@ There is an account-wide limit of 16 simultaneously controlled phones, including
 - After an action, inspect a fresh image to verify the result. Submission alone does not confirm the intended screen change.
 - If an action times out, keep its original operation ID, check its status, and observe the associated result. Do not replay an action whose outcome is unknown, especially when `retry_safe` is false.
 - On completion, interruption, or error, release held inputs and phone control. Confirm release is closed and drained; otherwise report cleanup as unresolved.
-- If a person takes control, stop phone actions and preserve unresolved operation IDs. After their session ends and the phone is available, an already authorized task can acquire a fresh session with the existing connection. Inspect a new screenshot; do not replay interrupted actions.
+- If a person takes control, stop operating the phone until they explicitly resume the task and a fresh check confirms availability.
 - If authorization expires, reconnect through the independent login window. If the phone lease expires, renew it before requesting control.
 
 ## Optional local fallback prompt

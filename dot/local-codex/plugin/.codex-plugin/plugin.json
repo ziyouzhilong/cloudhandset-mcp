@@ -1,0 +1,21 @@
+{
+  "name": "cloudhandset",
+  "version": "0.1.5",
+  "description": "Connect Codex to your leased Android phones with CloudHandset MCP and a guided phone workflow.",
+  "author": { "name": "CloudHandset", "url": "https://www.cloudhandset.com" },
+  "homepage": "https://www.cloudhandset.com",
+  "keywords": ["android", "phone", "mcp"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "CloudHandset",
+    "shortDescription": "Connect to your leased Android phone",
+    "developerName": "CloudHandset",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": [
+      "Use CloudHandset to list my Android phones and check the connection. Let me choose a phone if needed, inspect its screen, and release control.",
+      "Use CloudHandset to complete my requested task on my selected Android phone. Verify each action from the screen and release control when finished."
+    ]
+  }
+}

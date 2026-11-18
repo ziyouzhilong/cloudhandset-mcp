@@ -18,7 +18,7 @@ Only `list_devices` and `observe` have the server's top-level read-only hint. Th
 | --- | --- | --- |
 | `list_devices` | `{}` | Lists currently authorized phones and their availability without acquiring control. Refresh for each task and after adding a phone. |
 | `acquire_control` | `device_id`, `operation_id` | Acquires one exclusive session. Check `acquired: true`, `state: "active"`; save `session_id`, epoch, expiry, capabilities. Does not evict a busy writer. |
-| `observe` | S; optional `after_operation_id` | Captures a fresh image, observation ID, expiry, and geometry. The optional field associates an existing operation receipt; it does not prove its business outcome. |
+| `observe` | S; optional `after_operation_id`; `include_ui` only if advertised by the live schema/session | Captures a fresh image, observation ID, expiry, and geometry. The optional field associates an existing operation receipt; it does not prove its business outcome. |
 | `tap` | O + `x`, `y` | One tap at the observed screenshot position. |
 | `swipe` | O + `start_x`, `start_y`, `end_x`, `end_y`, integer `duration_ms` (50–5000) | One swipe. |
 | `input_text` | O + nonempty `text`, at most 4096 UTF-8 bytes | Types into the focused field through the clipboard path; does not clear or submit the field. |

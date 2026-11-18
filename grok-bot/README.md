@@ -1,6 +1,8 @@
 # CloudHandset for Grok Bot
 
-Version **0.1.1** — private custom-MCP and personal-skill integration verified for single-phone observation, basic actions, a small text-file upload, and release; **not published to the marketplace**.
+> Includes the [shared task workflow](skills/cloudhandset-phone/references/phone-workflow.md) and three app guides for observing, acting and checking the result. A tool receipt alone does not establish task completion.
+
+Version **0.1.3** includes the shared task workflow and app guides. The package uses a custom MCP connection and a personal skill; it is not a catalog installation. The earlier **0.1.1** private custom-MCP and personal-skill integration verified single-phone observation, basic actions, a small text-file upload, and release.
 
 Use xAI's Grok Bot to inspect and operate your leased CloudHandset Android phones through the existing remote MCP service. The plugin contains a Cursor-format manifest, native MCP configuration, a phone-operation skill, and a Python file uploader. Phone tools run on CloudHandset; no app is installed on your Android phone.
 
@@ -8,11 +10,11 @@ CloudHandset has applied and verified the dedicated public OAuth client `cloudha
 
 ## Connect
 
-Follow [SETUP.md](SETUP.md). Private acceptance uses a custom remote MCP connector and an equivalent personal skill based on the bundled [phone instructions](skills/cloudhandset-phone/SKILL.md), with reference text inlined. In Grok Bot 0.75.3, `AddCustomMcp` prepared the connector. `UpdateSkill` saved the skill's catalog entry but did not create the `SKILL.md` file required by its loader; updating the same entry again did not resolve that gap. Writing the self-contained skill at the loader's explicitly reported path and copying the supplied helper to its `scripts/upload_file.py` made loading by name work. Two reads in the same turn and a subsequent-turn read succeeded without another save or repair.
+Follow [SETUP.md](SETUP.md). Reuse a working custom remote MCP connection and update the existing personal skill from the bundled [phone instructions](skills/cloudhandset-phone/SKILL.md). Preserve its relative `references/` and `scripts/` files, including the shared workflow and all three app guides. Verify the saved files and load the skill by name before phone use. An older host may require supplying a missing backing file at the exact path reported by its loader; do not guess a path or replace a private connector binding.
 
 Ask the Bot to load `cloudhandset-phone` by name. Private-skills settings, `/` selection, and persistence after a restart have not been verified. Saving a catalog entry alone does not install the backing file or uploader.
 
-The ZIP is a distribution and review candidate. The inspected host's `InstallPlugin` accepts a stable catalog plugin ID, not an attached ZIP or local path. This candidate has no marketplace listing or catalog ID; custom MCP plus a personal skill must not be reported as a catalog plugin installation.
+The ZIP is a distribution of the public setup files. The inspected host's `InstallPlugin` accepts a stable catalog plugin ID, not an attached ZIP or local path. This package has no marketplace listing or catalog ID; custom MCP plus a personal skill must not be reported as a catalog plugin installation.
 
 | Setting | Value |
 | --- | --- |

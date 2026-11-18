@@ -1,0 +1,40 @@
+# First phone check with Dot
+
+## Account connection and newly added phones
+
+When the CloudHandset verification page offers **Current and future Android phone leases**, choose it to authorize this connection for the account's eligible phones, including phones added during the fixed 30-day connection. Each phone remains limited by its effective lease. Existing single-phone connections do not expand automatically; reconnect once to opt in. **Only one selected Android phone** keeps the previous single-phone scope. Account access does not clear an explicit automation stop. Ordinary customer take-back preserves authorization; once the customer leaves or disconnects and the phone is available, acquire a new session with the existing connection.
+
+Call `list_devices` again after adding a phone and at the start of each task. Select the returned `device_id`; never reuse a different phone's session. For `device_tool` actions named `share.*`, supply that `device_id` explicitly. A valid account connection can return an empty list when it has no eligible leases.
+
+Complete the connection and skill installation in [README.md](README.md) first. The installed plugin should show one connected CloudHandset app and one android-phone skill.
+
+Send this to Dot:
+
+> Use my authenticated CloudHandset tools directly to list my Android phones. Let me choose one if needed. Acquire the selected phone, inspect its actual current screen image and describe it, then release control and confirm the writer is closed and drained. This is a screen check only: do not click, type, install, change network settings, or reboot. If tools, login, or a usable image are unavailable, report the missing prerequisite and any unresolved control session. Do not claim success from tool discovery or command submission alone.
+
+You may include the phone's displayed name in the request. Dot should match it against the current device list. A successful check means Dot inspected the real image and confirmed release. For later tasks, specify the action you want and when Dot should stop.
+
+## Multiple-phone screen check
+
+After the account connection covers the selected phones, use a request such as:
+
+> Use CloudHandset to check the screens of PHONE A and PHONE B. Match their names against a fresh device list and skip any phone that is in use. Keep a separate session and result for each phone. If your host supports parallel tool calls, acquire and observe the phones concurrently within the service's call budget; otherwise interleave the steps and say so. Read both actual images, then release each session and verify closed and drained evidence independently. Do not tap, type, upload, install, restart, or take over a busy phone. If one phone fails, retain its error and any operation ID while still reporting and cleaning up the other phone.
+
+Replace the names with the phones you intend to check. For subsequent work, state the task for each phone and its stopping condition. The skill follows [parallel control](plugin/skills/android-phone/references/parallel-control.md). Each account is limited to 16 simultaneously controlled phones across all tasks, clients, and credentials; use at most 16 targets and workers. An oversized batch is rejected before dispatch, without automatic splitting. On `account_device_limit_reached`, stop acquiring, report the limit, and wait for confirmed release of your own sessions before an explicit next acquisition. Do not change credentials or release another task's session to gain capacity.
+
+## Control and recovery
+
+- An occupied phone must remain with its current operator. Do not take over automatically.
+- After an action, inspect a fresh image to verify the result. Submission alone does not confirm the intended screen change.
+- If an action times out, keep its original operation ID, check its status, and observe the associated result. Do not replay an action whose outcome is unknown, especially when `retry_safe` is false.
+- On completion, interruption, or error, release held inputs and phone control. Confirm release is closed and drained; otherwise report cleanup as unresolved.
+- If a person takes control, stop operating the phone until they explicitly resume the task and a fresh check confirms availability.
+- If authorization expires, reconnect through the independent login window. If the phone lease expires, renew it before requesting control.
+
+## Optional local fallback prompt
+
+Use this only when you have enabled Dot access to an online computer with the CloudHandset Codex plugin installed and authenticated:
+
+> Create a local Codex task on my connected computer using the installed `cloudhandset:cloudhandset-phone` skill and existing CloudHandset connection. List my Android phones and let me choose one if needed. Inspect the selected phone's real screen and describe it, then release control and confirm the writer is closed and drained. Do not click, type, install, change network settings, or reboot. Wait for the task result and identify which executor inspected the image. Report missing prerequisites or unresolved control. Do not install a duplicate MCP server or copy credentials.
+
+The computer must remain online for this route. Dot must wait for the local result before reporting completion; creating the task is not completion. The same control and recovery rules apply.
