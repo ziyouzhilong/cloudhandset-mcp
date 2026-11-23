@@ -1,19 +1,20 @@
 # CloudHandset MCP Plugins
 
-> Release **plugins-2026.11.17**. See [release status and validation limits](RELEASE_STATUS.md).
+> **[Google Antigravity 0.1.0](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/tag/antigravity-v0.1.0)** · [English guide](antigravity/README.md#english) · [简体中文使用说明](antigravity/README.md#简体中文)
 
-Connect Codex, OpenAI Dot, Meta Muse or Grok Bot to Android phones covered by your CloudHandset leases. Each customer signs in with their own account. Packages do not contain credentials or grant phone access by themselves.
+Connect Codex, OpenAI Dot, Meta Muse, Grok Bot or Google Antigravity to Android phones covered by your CloudHandset leases. Each customer signs in with their own account. Packages do not contain credentials or grant phone access by themselves.
 
 ## Packages
 
 | Client | Release asset | Installation |
 | --- | --- | --- |
+| Google Antigravity 0.1.0 | [Plugin ZIP](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/antigravity-v0.1.0/cloudhandset-antigravity-plugin-0.1.0.zip) | [English](antigravity/README.md#english) · [简体中文](antigravity/README.md#简体中文) |
 | Codex 0.1.5 | [Plugin ZIP](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.11.17/cloudhandset-codex-plugin-0.1.5.zip) | [Codex guide](CODEX_INSTALL.md) |
 | Dot 0.2.6 | [Setup ZIP](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.11.17/cloudhandset-dot-setup-0.2.6.zip) | [Dot guide](DOT_INSTALL.md) |
 | Muse 0.1.4 | [Setup ZIP](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.11.17/cloudhandset-muse-setup-0.1.4.zip) | [Muse guide](MUSE_INSTALL.md) |
 | Grok Bot 0.1.3 | [Setup ZIP](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.11.17/cloudhandset-grok-bot-plugin-0.1.3.zip) | [Grok Bot guide](GROK_INSTALL.md) |
 
-The separate [unbound Dot plugin ZIP](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.11.17/cloudhandset-dot-plugin-0.2.6.zip) is also available; most customers should use the setup kit and follow its connection-binding procedure. Choose named assets, not GitHub's automatically generated Source code archives. Verify the five files against [SHA256SUMS](SHA256SUMS); [release.json](release.json) records exact sizes, versions, hashes and publication status.
+The separate [unbound Dot plugin ZIP](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/plugins-2026.11.17/cloudhandset-dot-plugin-0.2.6.zip) is also available; most customers should use the setup kit and follow its connection-binding procedure. Choose named assets, not GitHub's automatically generated Source code archives. For the Antigravity ZIP, use the [Antigravity checksum](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/download/antigravity-v0.1.0/SHA256SUMS). For the Nov 17 bundle, verify its five ZIP files against [SHA256SUMS](SHA256SUMS); [release.json](release.json) records exact sizes, versions, hashes and publication status.
 
 ## Install and upgrade
 

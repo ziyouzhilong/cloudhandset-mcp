@@ -1,5 +1,11 @@
 # Release status and validation limits
 
+## Google Antigravity 0.1.0
+
+The [plugin release](https://github.com/ziyouzhilong/cloudhandset-mcp/releases/tag/antigravity-v0.1.0) contains the ZIP and its SHA-256 checksum. The production CloudHandset sign-in endpoint is enabled. The earlier candidate passed native CLI installation in an isolated profile. The public ZIP updates its bilingual README. Real-account sign-in and a physical phone screen check still require end-to-end confirmation. [Installation and first use](antigravity/README.md) · [Asset details](antigravity-release.json)
+
+## Multi-client bundle
+
 Release tag: **plugins-2026.11.17**. Status: **published**. The public repository, five assets and their checksums are released under this tag. This publication does not establish a marketplace listing, website deployment or a new host installation.
 
 The versions and exact asset bytes are listed in [release.json](release.json) and [SHA256SUMS](SHA256SUMS). Download the named release assets and verify their bytes against these checksums.

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "phone": {
+      "serverUrl": "https://device.cloudhandset.com/mcp",
+      "oauth": { "clientId": "cloudhandset-antigravity" }
+    }
+  }
+}

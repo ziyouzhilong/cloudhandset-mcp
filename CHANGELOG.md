@@ -1,5 +1,9 @@
 # Changelog
 
+## antigravity-v0.1.0
+
+Google Antigravity can connect to CloudHandset through its native MCP plugin. Download version 0.1.0 and follow the [English and Chinese guide](antigravity/README.md) to sign in and select a leased Android phone.
+
 ## plugins-2026.11.17
 
 - Release Codex 0.1.5, Dot 0.2.6, Muse 0.1.4 and Grok Bot 0.1.3 with the shared task workflow, complete app guides and strict original-file upload preflight.

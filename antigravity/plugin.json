@@ -1,0 +1,9 @@
+{
+  "$schema": "https://antigravity.google/schemas/v1/plugin.json",
+  "name": "cloudhandset",
+  "displayName": "CloudHandset",
+  "version": "0.1.0",
+  "description": "List your leased Android phones, inspect their screens and carry out requested tasks.",
+  "author": "CloudHandset",
+  "suggestedPrompts": ["List my CloudHandset phones."]
+}
